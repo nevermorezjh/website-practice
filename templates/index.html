@@ -113,14 +113,17 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
+                <h6>Stock Pools</h6>
                 <div id="stocks" class="row">
-                    <select id="unselectedstockpool" name="stocks" multiple class="col-md-4 form-control" style="height: 160px;"></select>
-                    <div class="col-md-2 center-block control-buttons" style="margin-top: 80px; margin-left: 40px;">
-                        <button type="button" class="btn btn-default btn-success col-md-8 col-md-offset-4"><i class="fas fa-check"></i></button>
+                    <select id="unselected-stockpool" name="stocks" multiple class="col-md-2 col-xs-2 form-control" style="height: 160px; margin-right: 20px;"></select>
+                    <select id="unselected-stocks" name="stocks" multiple class="col-md-2 col-xs-2 form-control" style="height: 160px;"></select>
+                    <div class="col-md-1 center-block control-buttons">
+                        <button type="button" id="stock-selectAll" class="btn btn-default btn-success" style="margin-left:35px;"><i class="fas fa-check"></i></button>
+                        <button type="button" id="stock-selectAll" class="btn btn-default btn-primary" style="margin-left:35px;"><i class="fas fa-arrow-right"></i></button>
+                        <button type="button" id="stock-selectAll" class="btn btn-default btn-primary" style="margin-left:35px;"><i class="fas fa-arrow-left"></i></button>
+                        <button type="button" id="stock-selectAll" class="btn btn-default btn-danger" style="margin-left:35px;"><i class="fas fa-trash"></i></button>
                     </div>
-
-                    <select id="selectedstockpool" name="stocks" multiple class="col-md-4 form-control" style="height: 160px;"></select>
+                    <select id="selected-stocks" name="stocks" multiple class="col-md-2 col-xs-2 form-control" style="height: 160px;"></select>
                 </div>
                 </div>
 
@@ -132,14 +135,7 @@
         </div>
         <!-- End of Main Content -->
 
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2019</span>
-                </div>
-            </div>
-        </footer>
+
         <!-- End of Footer -->
 
     </div>
@@ -176,6 +172,38 @@
     $(document).ready(function () {
 
         initialize();
+
+        var stockSelectAll = document.getElementById("stock-selectAll");
+        var unselectedStockpool = document.getElementById("unselected-stockpool");
+
+        unselectedStockpool.onchange = function(){
+            console.log("change");
+            var unselectedStocks = $("#unselected-stocks");
+            var index = this.selectedIndex;
+            var value = this.options[index].value;
+            var text = this.options[index].text;
+            unselectedStocks.find('option').remove();
+            for (var i=0;i<10;i++) {
+                unselectedStocks.append('<option value="' + value + i + '">' + text + i + '</option>');
+            }
+        };
+
+        stockSelectAll.onclick = function() {
+            console.log("hello");
+            var unselectedStocks = document.getElementById("unselected-stocks");
+            var selectedStocks = document.getElementById("selected-stocks");
+
+            var index = unselectedStocks.selectedIndex;
+            if (index !== -1) {
+                var value = unselectedStocks.options[index].value;
+                var text = unselectedStocks.options[index].text;
+
+                selectedStocks.add(new Option(text, value));
+
+                unselectedStocks.options.remove(index);
+            }
+
+        }
 
     });
 </script>
