@@ -21,6 +21,9 @@
     <!-- Custom styles for this template-->
     <link href="{% static "css/sb-admin-2.min.css" %}" rel="stylesheet">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css"
+          rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -113,33 +116,126 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <h6>Stock Pools</h6>
-                <div id="stocks" class="row">
-                    <select id="unselected-stockPool" name="stocks" multiple class="col-md-2 col-xs-2 form-control" style="height: 160px; margin-right: 20px;"></select>
-                    <select id="unselected-stocks" name="stocks" multiple class="col-md-2 col-xs-2 form-control" style="height: 160px;"></select>
-                    <div class="col-md-1 center-block control-buttons">
-                        <button type="button" id="stock-selectAll" class="btn btn-default btn-success" style="margin-left:35px;"><i class="fas fa-check"></i></button>
-                        <button type="button" id="stock-selectOne" class="btn btn-default btn-primary" style="margin-left:35px;"><i class="fas fa-arrow-right"></i></button>
-                        <button type="button" id="stock-removeOne" class="btn btn-default btn-primary" style="margin-left:35px;"><i class="fas fa-arrow-left"></i></button>
-                        <button type="button" id="stock-removeAll" class="btn btn-default btn-danger" style="margin-left:35px;"><i class="fas fa-trash"></i></button>
+                <!-- model parameters -->
+                <!-- Content Row -->
+                <div class="row form-group">
+                    <h7 style="margin-top: 4px;">模型类型：</h7>
+                    <div class="dropdown mb-3" style="margin-right: 20px;">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="model-types"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {% if models %}
+                                {{ models.0 }}
+                            {% endif %}
+                        </button>
+                        <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types" id="models">
+                            {% for item in models %}
+                                <li><a class="dropdown-item">{{ item }}</a></li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    <select id="selected-stocks" name="stocks" multiple class="col-md-2 col-xs-2 form-control" style="height: 160px;"></select>
+
+                    <h7 style="margin-top: 5px;">配置日期：</h7>
+                    <input data-provide="datepicker" class="col-md-1 form-control"
+                           style="width: 100px;margin-right: 20px;">
+                    <h7 style="margin-top: 5px;">回溯时长：</h7>
+                    <input type="number" class="col-md-1 form-control" style="width: 100px;margin-right: 20px;">
+                    <h7 style="margin-top: 5px;">个股最小权重：</h7>
+                    <input type="number" step="0.01" class="col-md-1 form-control"
+                           style="width: 100px;margin-right: 20px;">
+                    <h7 style="margin-top: 5px;">个股最大权重：</h7>
+                    <input type="number" step="0.01" class="col-md-1 form-control"
+                           style="width: 100px;margin-right: 20px;">
+
                 </div>
+
+                <div class="row" id="model-parameters">
+
+
                 </div>
 
 
+                <!-- stock pool -->
+                <div class="form-group">
+
+                    <div id="stocks" class="row">
+                        <div class="col-md-2 col-xs-2">
+                            <h6>股票池</h6>
+                            <select id="unselected-stockPool" name="stocks" multiple class="form-control"
+                                    style="height: 160px; margin-right: 20px;"></select>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <h6>待选股票</h6>
+                            <select id="unselected-stocks" name="stocks" multiple class="form-control"
+                                    style="height: 160px;"></select>
+                        </div>
+                        <div class="col-md-1 center-block control-buttons" style="margin-top: 30px;">
+                            <button type="button" id="stock-selectAll" class="btn btn-default btn-success"
+                                    style="margin-left:35px;"><i class="fas fa-check"></i></button>
+                            <button type="button" id="stock-selectOne" class="btn btn-default btn-primary"
+                                    style="margin-left:35px;"><i class="fas fa-arrow-right"></i></button>
+                            <button type="button" id="stock-removeOne" class="btn btn-default btn-primary"
+                                    style="margin-left:35px;"><i class="fas fa-arrow-left"></i></button>
+                            <button type="button" id="stock-removeAll" class="btn btn-default btn-danger"
+                                    style="margin-left:35px;"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <h6>已选股票</h6>
+                            <select id="selected-stocks" name="stocks" multiple class="form-control"
+                                    style="height: 160px;"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h6>股票约束</h6>
+
+                    <div id="restrict-stocks" class="row">
+                        <div class="col-md-2 col-xs-2">
+                            <h6>待配置股票集</h6>
+                            <select id="unselected-restrict-stocks" name="stocks" multiple
+                                    class="form-control"
+                                    style="height: 160px;"></select>
+                        </div>
+                        <div class="col-md-1 center-block control-buttons" style="margin-top: 30px;">
+                            <button type="button" id="restrict-stock-selectAll" class="btn btn-default btn-success"
+                                    style="margin-left:35px;"><i class="fas fa-check"></i></button>
+                            <button type="button" id="restrict-stock-selectOne" class="btn btn-default btn-primary"
+                                    style="margin-left:35px;"><i class="fas fa-arrow-right"></i></button>
+                            <button type="button" id="restrict-stock-removeOne" class="btn btn-default btn-primary"
+                                    style="margin-left:35px;"><i class="fas fa-arrow-left"></i></button>
+                            <button type="button" id="restrict-stock-removeAll" class="btn btn-default btn-danger"
+                                    style="margin-left:35px;"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <h6>待约束股票集</h6>
+                            <select id="selected-restrict-stocks" name="stocks" multiple
+                                    class="form-control"
+                                    style="height: 160px;"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- submit -->
+                <div class="form-group">
+                    <btn type="button" id="submit-btn" class="btn btn-default btn-success col-md-1">
+                        submit
+                    </btn>
+                </div>
             </div>
-            <!-- /.container-fluid -->
 
 
         </div>
-        <!-- End of Main Content -->
+        <!-- /.container-fluid -->
 
-
-        <!-- End of Footer -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+
+
+    <!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
@@ -167,20 +263,49 @@
 
 <!-- Page level custom scripts -->
 <script src="{% static "js/quant.js" %}"></script>
+<script src="{% static "js/bootstrap-datepicker.js" %}"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
         var stockPool = getStockPool();
+        var restrictPool = getRestrictPool();
         console.log(stockPool);
         initializeStockPool(stockPool);
+        initializeRestrictPool(restrictPool);
 
-         document.getElementById("unselected-stockPool").onchange = function () {
+        document.getElementById("unselected-stockPool").onchange = function () {
             unselectedStockPoolOnChange(this, stockPool);
         };
         document.getElementById("stock-selectOne").onclick = selectOneStock;
         document.getElementById("stock-selectAll").onclick = selectAllStocks;
         document.getElementById("stock-removeOne").onclick = removeOneStock;
         document.getElementById("stock-removeAll").onclick = removeAllStocks;
+
+        document.getElementById("restrict-stock-selectOne").onclick = selectOneStockRestrict;
+        document.getElementById("restrict-stock-selectAll").onclick = selectAllStocksRestrict;
+        document.getElementById("restrict-stock-removeOne").onclick = removeOneStockRestrict;
+        document.getElementById("restrict-stock-removeAll").onclick = removeAllStocksRestrict;
+
+        $(function () {
+            $("#models").on('click', 'li a', function () {
+                $("#model-types").text($(this).text());
+                renderParameters($("#model-types").text());
+            });
+
+            $("#calculation").on('click', 'li a', function () {
+                $("#expected-benefit").text($(this).text());
+            });
+        });
+
+        renderParameters($("#model-types").text());
+
+        $('.datepicker').datepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            format: 'yyyy/mm/dd',
+        });
+
     });
 </script>
 
