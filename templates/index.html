@@ -310,6 +310,15 @@
             e.preventDefault();
             console.log("123");
             // your statements;
+            var selectedStocks = getAllOptions("selected-stocks");
+            var selectedRestrictStocks = getAllOptions("selected-restrict-stocks");
+            {#var date = $(".datepicker");#}
+            console.log(selectedStocks);
+            console.log(selectedRestrictStocks);
+
+
+
+
         });
 
     });
