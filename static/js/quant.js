@@ -158,19 +158,6 @@ function sortSelect(elementID) {
     }
 }
 
-function renderParameters(model) {
-    var obj = document.getElementById("model-parameters");
-    if (model === "均值方差模型") {
-        var content = '<h7 style=\"margin-top: 5px;\">风险厌恶系数：</h7> <input type=\"number\" step=\"0.01\" class=\"col-md-1 form-control\" style=\"margin-right: 50px;\"> <h7 style=\"margin-top: 5px;\">预期收益率计算方法：</h7> <div class=\"dropdown mb-4\"> <button class=\"btn btn-secondary btn-sm dropdown-toggle\" type=\"button\" id=\"expected-benefit\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\" value=\"历史收益率均值法\"> 历史收益率均值法 </button> <ul class=\"dropdown-menu animated--fade-in\" aria-labelledby=\"expected-benefit\" id=\"calculation\"> <li><a class=\"dropdown-item\">历史收益率均值法</a></li> <li><a class=\"dropdown-item\">市场指数模型法</a></li> </ul> </div>';
-        obj.innerHTML = content;
-
-    }
-    else {
-        obj.innerHTML = '';
-    }
-}
-
-
 function selectOneStockRestrict() {
     var unselectedStocks = document.getElementById("unselected-restrict-stocks");
     var selectedStocks = document.getElementById("selected-restrict-stocks");
