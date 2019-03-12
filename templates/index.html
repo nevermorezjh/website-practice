@@ -135,16 +135,16 @@
                     </div>
 
                     <h7 style="margin-top: 5px;">配置日期：</h7>
-                    <input data-provide="datepicker" class="col-md-1 form-control"
-                           style="width: 100px;margin-right: 20px;">
+                    <input data-provide="datepicker" id="date" class="form-control"
+                           style="width: 120px;margin-right: 20px;">
                     <h7 style="margin-top: 5px;">回溯时长：</h7>
-                    <input type="number" class="col-md-1 form-control" style="width: 100px;margin-right: 20px;">
+                    <input type="number" class="form-control" id="date-back" style="width: 120px;margin-right: 20px;">
                     <h7 style="margin-top: 5px;">个股最小权重：</h7>
-                    <input type="number" step="0.01" class="col-md-1 form-control"
-                           style="width: 100px;margin-right: 20px;">
+                    <input type="number" step="0.01" id="mini-weight" class="form-control"
+                           style="width: 120px;margin-right: 20px;">
                     <h7 style="margin-top: 5px;">个股最大权重：</h7>
-                    <input type="number" step="0.01" class="col-md-1 form-control"
-                           style="width: 100px;margin-right: 20px;">
+                    <input type="number" step="0.01" id="maxi-weight" class="form-control"
+                           style="width: 120px;margin-right: 20px;">
 
                 </div>
 
@@ -276,15 +276,44 @@
         document.getElementById("unselected-stockPool").onchange = function () {
             unselectedStockPoolOnChange(this, stockPool);
         };
-        document.getElementById("stock-selectOne").onclick = selectOneStock;
-        document.getElementById("stock-selectAll").onclick = selectAllStocks;
-        document.getElementById("stock-removeOne").onclick = removeOneStock;
-        document.getElementById("stock-removeAll").onclick = removeAllStocks;
+        $("#stock-selectOne").on('click', function () {
+            selectOneStock();
+        });
+        $("#stock-removeOne").on('click', function () {
+            removeOneStock();
+        });
+        $("#stock-selectAll").on('click', function () {
+            selectAllStocks();
+        });
+        $("#stock-removeAll").on('click', function () {
+            removeAllStocks();
+        });
+        $('#unselected-stocks').dblclick(function(){
+           selectOneStock();
+        });
+        $('#selected-stocks').dblclick(function(){
+           removeOneStock();
+        });
 
-        document.getElementById("restrict-stock-selectOne").onclick = selectOneStockRestrict;
-        document.getElementById("restrict-stock-selectAll").onclick = selectAllStocksRestrict;
-        document.getElementById("restrict-stock-removeOne").onclick = removeOneStockRestrict;
-        document.getElementById("restrict-stock-removeAll").onclick = removeAllStocksRestrict;
+        $('#restrict-stock-selectOne').on('click', function () {
+            selectOneStockRestrict();
+        });
+        $('#restrict-stock-selectAll').on('click', function () {
+            selectAllStocksRestrict();
+        });
+        $('#restrict-stock-removeOne').on('click', function () {
+            removeOneStockRestrict();
+        });
+        $('#restrict-stock-removeAll').on('click', function () {
+            removeAllStocksRestrict();
+        });
+
+        $('#unselected-restrict-stocks').dblclick(function(){
+           selectOneStockRestrict();
+        });
+        $('#selected-restrict-stocks').dblclick(function(){
+           removeOneStockRestrict();
+        });
 
         $(function () {
             $("#models").on('click', 'li a', function () {
@@ -312,12 +341,18 @@
             // your statements;
             var selectedStocks = getAllOptions("selected-stocks");
             var selectedRestrictStocks = getAllOptions("selected-restrict-stocks");
-            {#var date = $(".datepicker");#}
+            var modelType = $("#model-types").text();
+            var date = document.getElementById("date").value;
+            var dateBack = document.getElementById("date-back").value;
+            var miniWeight = document.getElementById("mini-weight").value;
+            var maxiWeight = document.getElementById("maxi-weight").value;
             console.log(selectedStocks);
             console.log(selectedRestrictStocks);
-
-
-
+            console.log(modelType);
+            console.log(date);
+            console.log(dateBack);
+            console.log(miniWeight);
+            console.log(maxiWeight);
 
         });
 
