@@ -36,3 +36,19 @@ def get_restrict(request):
 			stocks.append(item + '-' + str(i))
 		stockpools[item] = stocks
 	return JsonResponse(stockpools)
+
+@csrf_exempt
+def combine_arrange(request):
+	if request.method == 'POST':
+		concat = request.POST
+		postBody = request.body
+		# print(concat)
+		# print(type(postBody))
+		# print(postBody)
+		json_result = json.loads(postBody.decode('utf-8'))
+		print(type(json_result))
+		for key in json_result:
+			print(key, json_result[key])
+		print(json_result['date'])
+		return JsonResponse({"123": 314})
+	# return HttpResponseRedirect("ok")
