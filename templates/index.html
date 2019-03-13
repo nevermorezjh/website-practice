@@ -19,7 +19,7 @@
 
 
     <!-- Custom styles for this template-->
-    <link href="{% static "css/sb-admin-2.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/sb-admin-2.css" %}" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css"
           rel="stylesheet">
@@ -63,27 +63,14 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true"
-               aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Components</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Components:</h6>
-                    <a class="collapse-item" href="buttons.html">Buttons</a>
-                    <a class="collapse-item" href="cards.html">Cards</a>
-                </div>
-            </div>
-        </li>
-
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
+            <a class="nav-link" href="/index">
                 <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
+                <span>首页</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/quant">
+                <i class="fas fa-fw fa-table"></i>
+                <span>组合配置</span></a>
         </li>
 
         <!-- Divider -->
@@ -195,25 +182,29 @@
                                 <select id="unselected-stocks" name="stocks" multiple class="form-control"
                                         style="height: 160px;"></select>
                             </div>
-                            <div class="center-block control-buttons" style="margin-top: 2%; margin-left: 1%;">
+                            <div class="center-block control-buttons" style="margin-top: 1.6%; margin-left: 1%;">
                                 <div class="row">
-                                    <button type="button" id="stock-selectAll" class="btn btn-default btn-success"
-                                            style="margin-left:10%;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="stock-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
                                 </div>
                                 <div class="row">
-                                    <button type="button" id="stock-selectOne" class="btn btn-default btn-primary"
-                                            style="margin-left:10%;"><i class="fas fa-arrow-right"></i></button>
+                                    <button type="button" id="stock-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
                                 </div>
                                 <div class="row">
-                                    <button type="button" id="stock-removeOne" class="btn btn-default btn-primary"
-                                            style="margin-left:10%;"><i class="fas fa-arrow-left"></i></button>
+                                    <button type="button" id="stock-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
                                 </div>
                                 <div class="row">
-                                    <button type="button" id="stock-removeAll" class="btn btn-default btn-danger"
-                                            style="margin-left:10%;"><i class="fas fa-trash"></i></button>
+                                    <button type="button" id="stock-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
                                 </div>
                             </div>
-                            <div class="col-md-2 col-xs-2" style="margin-left: 1.2%;">
+                            <div class="col-md-2" style="margin-left: 1.2%;">
                                 <h6>已选股票</h6>
                                 <select id="selected-stocks" name="stocks" multiple class="form-control"
                                         style="height: 160px;"></select>
@@ -258,21 +249,29 @@
                                             class="form-control"
                                             style="height: 160px;"></select>
                                 </div>
-                                <div class="col-md-1 center-block control-buttons" style="margin-top: 30px;">
-                                    <button type="button" id="restrict-stock-selectAll"
-                                            class="btn btn-default btn-success"
-                                            style="margin-left:35px;"><i class="fas fa-check"></i></button>
-                                    <button type="button" id="restrict-stock-selectOne"
-                                            class="btn btn-default btn-primary"
-                                            style="margin-left:35px;"><i class="fas fa-arrow-right"></i></button>
-                                    <button type="button" id="restrict-stock-removeOne"
-                                            class="btn btn-default btn-primary"
-                                            style="margin-left:35px;"><i class="fas fa-arrow-left"></i></button>
-                                    <button type="button" id="restrict-stock-removeAll"
-                                            class="btn btn-default btn-danger"
-                                            style="margin-left:35px;"><i class="fas fa-trash"></i></button>
+                                <div class="center-block control-buttons" style="margin-top: 2%;">
+                                    <div>
+                                        <button type="button" id="restrict-stock-selectAll"
+                                                class="btn btn-default btn-success btn-selectbox"><i
+                                                class="fas fa-check"></i></button>
+                                    </div>
+                                    <div>
+                                        <button type="button" id="restrict-stock-selectOne"
+                                                class="btn btn-default btn-primary btn-selectbox"><i
+                                                class="fas fa-arrow-right"></i></button>
+                                    </div>
+                                    <div>
+                                        <button type="button" id="restrict-stock-removeOne"
+                                                class="btn btn-default btn-primary btn-selectbox"><i
+                                                class="fas fa-arrow-left"></i></button>
+                                    </div>
+                                    <div>
+                                        <button type="button" id="restrict-stock-removeAll"
+                                                class="btn btn-default btn-danger btn-selectbox"><i
+                                                class="fas fa-trash"></i></button>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 col-xs-2">
+                                <div class="col-md-2">
                                     <h6>待约束股票集</h6>
                                     <select id="selected-restrict-stocks" name="stocks" multiple
                                             class="form-control"
@@ -281,10 +280,12 @@
                             </div>
                             <div class="row col-md-10 form-group">
                                 <h7 style="margin-top: 0.5%;">取值范围：</h7>
-                                <input type="number" step="0.01" id="restrict-mini-weight" value="0" class="form-control"
+                                <input type="number" step="0.01" id="restrict-mini-weight" value="0"
+                                       class="form-control"
                                        style="width: 100px;margin-right: 1%;">
                                 <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
-                                <input type="number" step="0.01" id="restrict-maxi-weight" value="0.4" class="form-control"
+                                <input type="number" step="0.01" id="restrict-maxi-weight" value="0.4"
+                                       class="form-control"
                                        style="width: 100px;margin-right: 1%;">
                                 <btn type="button" id="add-restrict" class="btn btn-default btn-success"
                                      style="margin-right: 2%;">
@@ -317,21 +318,31 @@
                         submit
                     </btn>
                 </div>
+
+                <div class="card border-left-primary form-group" style="height: 1000px;">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+
+                </div>
+
             </div>
+            <!-- /.container-fluid -->
 
 
         </div>
-        <!-- /.container-fluid -->
+        <!-- End of Main Content -->
 
+
+        <!-- End of Footer -->
 
     </div>
-    <!-- End of Main Content -->
-
-
-    <!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
+    <!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
@@ -361,6 +372,7 @@
 <script src="{% static "js/quant.js" %}"></script>
 <script src="{% static "js/bootstrap-datepicker.js" %}"></script>
 <script src="{% static "vendor/datatables/jquery.dataTables.min.js" %}"></script>
+<script src="{% static "vendor/chart.js/Chart.min.js" %}"></script>
 <script src="{% static "vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
 
 <script type="text/javascript">
@@ -381,7 +393,7 @@
         var restrictTable = $('#restrict-table').DataTable();
 
         $('#restrict-table').on('dblclick', 'tbody tr', function () {
-            restrictTable.row( this ).remove().draw(true);
+            restrictTable.row(this).remove().draw(true);
         });
 
         $("#stock-selectOne").on('click', function () {
@@ -462,7 +474,7 @@
                 console.log(maxiWeight);
                 for (var key in restricts) {
                     console.log(key);
-                    restrictTable.row.add(["123","345"]).draw();
+                    restrictTable.row.add(["123", "345"]).draw();
                     console.log(key);
                 }
             });
@@ -497,6 +509,44 @@
             console.log(miniWeight);
             console.log(maxiWeight);
 
+        });
+
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
         });
 
     });
