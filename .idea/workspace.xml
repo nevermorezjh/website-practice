@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="cbe20b62-82eb-44a8-8571-425c1334a10d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/quant/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/quant/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quant/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/quant/views.py" afterDir="false" />
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
       <change beforePath="$PROJECT_DIR$/static/css/sb-admin-2.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/sb-admin-2.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
@@ -15,6 +20,7 @@
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
+<<<<<<< HEAD
   <component name="FUSProjectUsageTrigger">
     <session id="-749732479">
       <usages-collector id="statistics.lifecycle.project">
@@ -49,6 +55,8 @@
       </usages-collector>
     </session>
   </component>
+=======
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
   <component name="FileEditorManager">
     <splitter split-orientation="horizontal" split-proportion="0.5456193">
       <split-first>
@@ -56,6 +64,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/templates/index.html">
               <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
                 <state relative-caret-position="416">
                   <caret line="321" column="86" selection-start-line="321" selection-start-column="86" selection-end-line="321" selection-end-column="86" />
                   <folding>
@@ -72,7 +81,22 @@
                     <element signature="n#style#0;n#btn#0;n#div#1;n#div#2;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#4;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#canvas#0;n#div#0;n#div#1;n#div#0;n#div#4;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+=======
+                <state relative-caret-position="747">
+                  <caret line="521" column="14" selection-start-line="521" selection-start-column="14" selection-end-line="521" selection-end-column="14" />
+                  <folding>
+                    <element signature="n#style#0;n#table#0;n#div#2;n#div#2;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/static/css/sb-admin-2.css">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="792">
+                  <caret line="12007" column="1" selection-start-line="12007" selection-start-column="1" selection-end-line="12007" selection-end-column="1" />
                 </state>
               </provider>
             </entry>
@@ -89,8 +113,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/quant/urls.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="114">
-                  <caret line="8" column="70" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
+                <state relative-caret-position="135">
+                  <caret line="9" column="75" selection-start-line="9" selection-start-column="75" selection-end-line="9" selection-end-column="75" />
                   <folding>
                     <element signature="e#0#28#0" expanded="true" />
                   </folding>
@@ -101,8 +125,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/quant/views.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="513">
-                  <caret line="30" column="52" selection-start-line="30" selection-start-column="52" selection-end-line="30" selection-end-column="52" />
+                <state relative-caret-position="780">
+                  <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
                   <folding>
                     <element signature="e#0#55#0" expanded="true" />
                   </folding>
@@ -117,6 +141,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/static/js/quant.js">
               <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
                 <state relative-caret-position="494">
                   <caret line="149" column="44" selection-start-line="149" selection-start-column="44" selection-end-line="149" selection-end-column="44" />
                 </state>
@@ -128,6 +153,10 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="689">
                   <caret line="12010" column="17" selection-start-line="12010" selection-start-column="17" selection-end-line="12010" selection-end-column="17" />
+=======
+                <state relative-caret-position="570">
+                  <caret line="38" column="43" lean-forward="true" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
                 </state>
               </provider>
             </entry>
@@ -135,8 +164,16 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/templates/index.html">
               <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
                 <state relative-caret-position="4408">
                   <caret line="237" selection-start-line="237" selection-end-line="237" />
+=======
+                <state relative-caret-position="3705">
+                  <caret line="247" selection-start-line="247" selection-end-line="247" />
+                  <folding>
+                    <element signature="n#style#0;n#table#0;n#div#2;n#div#2;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                  </folding>
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
                 </state>
               </provider>
             </entry>
@@ -155,9 +192,13 @@
       <find>rimary</find>
       <find>maxi-wei</find>
       <find>maxi-weight</find>
+<<<<<<< HEAD
       <find>.btn</find>
       <find>min.cs</find>
       <find>dashboa</find>
+=======
+      <find>model-types</find>
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -167,25 +208,18 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/static/js/bootstrap-datepicker.js" />
-        <option value="$PROJECT_DIR$/quant/urls.py" />
-        <option value="$PROJECT_DIR$/quant/views.py" />
         <option value="$PROJECT_DIR$/static/js/quant.js" />
         <option value="$PROJECT_DIR$/static/css/sb-admin-2.css" />
+        <option value="$PROJECT_DIR$/quant/urls.py" />
+        <option value="$PROJECT_DIR$/quant/views.py" />
+<<<<<<< HEAD
+        <option value="$PROJECT_DIR$/static/js/quant.js" />
+        <option value="$PROJECT_DIR$/static/css/sb-admin-2.css" />
+=======
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
         <option value="$PROJECT_DIR$/templates/index.html" />
       </list>
     </option>
-  </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
-  </component>
-  <component name="NodePackageJsonFileManager">
-    <packageJsonPaths>
-      <path value="$PROJECT_DIR$/static/package.json" />
-      <path value="$PROJECT_DIR$/static/vendor/fontawesome-free/package.json" />
-    </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="260" />
@@ -223,7 +257,7 @@
     </option>
   </component>
   <component name="RunManager" selected="JavaScript Debug.index.html">
-    <configuration name="index.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/website/templates/index.html">
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/website/templates/index.html">
       <method v="2" />
     </configuration>
     <configuration name="website" type="Python.DjangoServer" factoryName="Django server">
@@ -274,17 +308,21 @@
       <workItem from="1552008428974" duration="23286000" />
       <workItem from="1552198752093" duration="1401000" />
       <workItem from="1552389938233" duration="7440000" />
+      <workItem from="1552481649020" duration="2444000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50585000" />
+    <option name="totallyTimeSpent" value="53029000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
+<<<<<<< HEAD
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.119936034" />
+=======
+      <window_info content_ui="combo" id="Project" order="0" weight="0.119936034" />
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -307,7 +345,7 @@
       <window_info anchor="right" id="Database" order="4" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17110874" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.119936034" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -319,7 +357,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="bottom" id="Python Console" order="12" />
@@ -332,9 +370,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/website/urls.py">
@@ -353,28 +388,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/quant/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="8" column="70" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
+        <state relative-caret-position="135">
+          <caret line="9" column="75" selection-start-line="9" selection-start-column="75" selection-end-line="9" selection-end-column="75" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quant/views.py">
+    <entry file="file://$PROJECT_DIR$/static/css/sb-admin-2.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="30" column="52" selection-start-line="30" selection-start-column="52" selection-end-line="30" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#55#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="792">
+          <caret line="12007" column="1" selection-start-line="12007" selection-start-column="1" selection-end-line="12007" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/quant.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="494">
           <caret line="149" column="44" selection-start-line="149" selection-start-column="44" selection-end-line="149" selection-end-column="44" />
+=======
+        <state relative-caret-position="570">
+          <caret line="38" column="43" lean-forward="true" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
         </state>
       </provider>
     </entry>
@@ -390,8 +427,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/quant/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="416">
           <caret line="321" column="86" selection-start-line="321" selection-start-column="86" selection-end-line="321" selection-end-column="86" />
           <folding>
@@ -408,6 +456,12 @@
             <element signature="n#style#0;n#btn#0;n#div#1;n#div#2;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#4;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#canvas#0;n#div#0;n#div#1;n#div#0;n#div#4;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+=======
+        <state relative-caret-position="747">
+          <caret line="521" column="14" selection-start-line="521" selection-start-column="14" selection-end-line="521" selection-end-column="14" />
+          <folding>
+            <element signature="n#style#0;n#table#0;n#div#2;n#div#2;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
           </folding>
         </state>
       </provider>

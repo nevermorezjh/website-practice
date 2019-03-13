@@ -294,11 +294,11 @@
                             </div>
 
                             <div class="col-md-5 table-responsive">
-                                <table class="table table-bordered" id="restrict-table" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="restrict-table" width="100%" cellspacing="0" style="text-align: center">
                                     <thead>
                                     <tr>
-                                        <th>约束条件</th>
                                         <th>约束类型</th>
+                                        <th>约束条件</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -306,8 +306,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -474,7 +472,13 @@
                 console.log(maxiWeight);
                 for (var key in restricts) {
                     console.log(key);
+<<<<<<< HEAD
                     restrictTable.row.add(["123", "345"]).draw();
+=======
+                    var restrictType = "股票比例约束";
+                    var restrictCondition = miniWeight + "<=" + key + "<=" + maxiWeight;
+                    restrictTable.row.add([restrictType, restrictCondition]).draw();
+>>>>>>> e65d02ce146f081827ea4a57c99a6fe611e899c0
                     console.log(key);
                 }
             });
@@ -496,7 +500,7 @@
             // your statements;
             var selectedStocks = getAllOptions("selected-stocks");
             var selectedRestrictStocks = getAllOptions("selected-restrict-stocks");
-            var modelType = $("#model-types").text();
+            var modelType = $("#model-types").text().trim();
             var date = document.getElementById("date").value;
             var dateBack = document.getElementById("date-back").value;
             var miniWeight = document.getElementById("mini-weight").value;
@@ -509,6 +513,27 @@
             console.log(miniWeight);
             console.log(maxiWeight);
 
+            var submitMessages = {
+                "modelType": modelType,
+                "date": date,
+                "dataBack": dateBack,
+                "miniWeight": miniWeight,
+                "maxiWeight": maxiWeight,
+                "selectedStocks": selectedStocks,
+                "restricts": restrictTable.row().data(),
+            };
+
+            console.log(submitMessages);
+
+            $.ajax({
+                type: 'POST',
+                url: 'combine_arrange',
+                data: JSON.stringify(submitMessages),
+                success: function(res) {
+                    console.log(res);
+                    console.log("hello");
+                }
+            })
         });
 
         var ctx = document.getElementById("myChart").getContext('2d');
