@@ -297,8 +297,8 @@
                                 <table class="table table-bordered" id="restrict-table" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
-                                        <th>约束条件</th>
                                         <th>约束类型</th>
+                                        <th>约束条件</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -438,7 +438,7 @@
         $(function () {
             $("#models").on('click', 'li a', function () {
                 $("#model-types").text($(this).text());
-                if ($("#model-types").text() == "均值方差模型" && modelType !== "均值方差模型") {
+                if ($("#model-types").text() === "均值方差模型" && modelType !== "均值方差模型") {
                     {#$("#restrict-stocks").hide();#}
                     $("#mean-mse-model").toggle("slow");
                     modelType = "均值方差模型";
@@ -450,12 +450,12 @@
             });
             $("#restrict").on('click', 'li a', function () {
                 $("#restrict-types").text($(this).text());
-                if ($("#restrict-types").text() == "统一约束" && restrictType !== "统一约束") {
+                if ($("#restrict-types").text() === "统一约束" && restrictType !== "统一约束") {
                     $("#restrict-stocks").hide();
                     $("#single-restrict").toggle("slow");
                     restrictType = "统一约束";
                 }
-                if ($("#restrict-types").text() == "个性化约束" && restrictType !== "个性化约束") {
+                if ($("#restrict-types").text() === "个性化约束" && restrictType !== "个性化约束") {
                     $("#single-restrict").hide();
                     $("#restrict-stocks").toggle("slow");
                     restrictType = "个性化约束";
@@ -470,12 +470,8 @@
                 var restricts = getAllOptions("selected-restrict-stocks");
                 var miniWeight = document.getElementById("restrict-mini-weight").value;
                 var maxiWeight = document.getElementById("restrict-maxi-weight").value;
-                console.log(miniWeight);
-                console.log(maxiWeight);
                 for (var key in restricts) {
-                    console.log(key);
-                    restrictTable.row.add(["123", "345"]).draw();
-                    console.log(key);
+                    restrictTable.row.add(["股票比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
                 }
             });
         });
