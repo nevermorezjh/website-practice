@@ -5,6 +5,9 @@ import json
 
 
 # Create your views here.
+def login(request):
+	return render(request, 'login.html')
+
 def index(request):
 	dicts = {"models" : ["Model1", "Model2", "均值方差模型", "Model3"]}
 	return render(request, "index.html", dicts)
