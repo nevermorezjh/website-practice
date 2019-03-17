@@ -62,13 +62,13 @@
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="/index">
+        <<li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">
                 <i class="fas fa-fw fa-table"></i>
                 <span>首页</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/quant">
+            <a class="nav-link" href="{% url 'combine' %}">
                 <i class="fas fa-fw fa-table"></i>
                 <span>组合配置</span></a>
         </li>
@@ -112,33 +112,41 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                                 </div>
-                                <form class="user" method="post" id="register-form">
+                                <form class="user" method="post" id="register-form" action="{% url 'register' %}">
                                     {% csrf_token %}
+
                                     <div class="form-group row">
                                         <div class="col-md-12">
                                             <input type="text" class="form-control form-control-user"
-                                                   id="user-name" name="user-name" placeholder="User Name">
+                                                   id="id-username" name="username" placeholder="User Name" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-12">
                                             <input type="email" class="form-control form-control-user"
-                                                   id="email" name="email" placeholder="Email Address">
+                                                   id="email" name="email" placeholder="Email Address" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-12">
                                             <input type="password" class="form-control form-control-user"
-                                                   id="password" name="password" placeholder="Password">
+                                                   id="id-password1" name="password1" placeholder="Password" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-12">
                                             <input type="password" class="form-control form-control-user"
-                                                   id="repeat-assword" placeholder="Repeat Password">
+                                                   id="id-password2" name="password2" placeholder="Repeat Password"
+                                                   required>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary btn-user btn-block" id="register">Register Account</button>
+                                    {% for err in errors %}
+                                        <ul class="font-weight-normal text-danger justify-content-center">
+                                            {{  err }}
+                                        </ul>
+                                    {% endfor %}
+                                    <button class="btn btn-primary btn-user btn-block" id="register">Register Account
+                                    </button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
@@ -191,18 +199,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#register').click(function() {
-            console.log("123");
-            $.ajax({
-                type: 'POST',
-                datatype: 'text',
-                url: 'register',
-                data: $('#register-form').serializeArray(),
-                success: function(data) {
-                    console.log('success');
-                }
-            })
-        });
+
     });
 </script>
 

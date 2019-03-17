@@ -63,12 +63,12 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link" href="/index">
+            <a class="nav-link" href="{% url 'login' %}">
                 <i class="fas fa-fw fa-table"></i>
                 <span>首页</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/quant">
+            <a class="nav-link" href="{% url 'combine' %}">
                 <i class="fas fa-fw fa-table"></i>
                 <span>组合配置</span></a>
         </li>
@@ -112,34 +112,52 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
-                                <form class="user">
-                                    <div class="form-group col-md-12">
-                                        <input type="email" class="form-control form-control-user"
-                                               id="exampleInputEmail"
-                                               aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                                {% if user.is_authenticated %}
+                                    <div class="form-group">
+                                        <a class="font-weight-normal text-primary form-group col-md-12">
+                                            <h3 class="text-center">{{ user.username }}</h3>
+                                        </a>
+                                        <button class="btn btn-danger form-group"><a href="logout" class="text-white">退出</a></button>
                                     </div>
-                                    <div class="form-group col-md-12">
-                                        <input type="password" class="form-control form-control-user"
-                                               id="exampleInputPassword"
-                                               placeholder="Password">
-                                    </div>
-                                    <div class="form-group col-md-12">
-                                        <div class="custom-control custom-checkbox small">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <label class="custom-control-label" for="customCheck">Remember Me</label>
+
+                                {% else %}
+                                    <form method="post" class="user" action="{% url 'login' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group col-md-12">
+                                            <input type="text" class="form-control form-control-user"
+                                                   id="id-username" name="username"
+                                                   aria-describedby="emailHelp" placeholder="User name">
                                         </div>
+                                        <div class="form-group col-md-12">
+                                            <input type="password" class="form-control form-control-user"
+                                                   id="id-password" name="password"
+                                                   placeholder="Password">
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">Remember
+                                                    Me</label>
+                                            </div>
+                                        </div>
+                                        {% if error %}
+                                            <ul class="font-weight-normal text-danger justify-content-center">
+                                                账号或密码错误
+                                            </ul>
+                                        {% endif %}
+                                        <button class="btn btn-primary btn-user btn-block">
+                                            Login
+                                        </button>
+                                    </form>
+
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password">Forgot Password?</a>
                                     </div>
-                                    <a href="index" class="btn btn-primary btn-user btn-block">
-                                        Login
-                                    </a>
-                                </form>
-                                <hr>
-                                <div class="text-center">
-                                    <a class="small" href="forgot-password">Forgot Password?</a>
-                                </div>
-                                <div class="text-center">
-                                    <a class="small" href="register">Create an Account!</a>
-                                </div>
+                                    <div class="text-center">
+                                        <a class="small" href="register">Create an Account!</a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

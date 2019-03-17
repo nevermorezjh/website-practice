@@ -1,55 +1,58 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .forms import LoginForm
+from .forms import RegisterForm
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.template.context import RequestContext
-
+import re
 
 
 # Create your views here.
 def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            request.session['user'] = username
+            return HttpResponseRedirect('/combine')
+        else:
+            return render(request, 'login.html', context={'error': True})
     return render(request, 'login.html')
-    # if request.method == 'GET':
-    #     form = LoginForm()
-    #     return render_to_response('login.html', RequestContext(request, {'form': form, }))
-    # else:
-    #     form = LoginForm(request.POST)
-    #     if form.is_valid():
-    #         username = request.POST.get('username', '')
-    #         password = request.POST.get('password', '')
-    #         user = auth.authenticate(username=username, password=password)
-    #         if user is not None and user.is_active:
-    #             auth.login(request, user)
-    #             return render_to_response('index.html', RequestContext(request))
-    #         else:
-    #             return render_to_response('login.html',
-    #                                       RequestContext(request, {'form': form, 'password_is_wrong': True}))
-    #     else:
-    #         return render_to_response('login.html', RequestContext(request, {'form': form, }))
+
+def logout(request):
+    auth.logout(request)
+    return render(request, 'login.html')
 
 
 def register(request):
     if request.method == 'POST':
-        user_name = request.POST.get('user-name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        print(user_name, email, password)
-        return HttpResponse("hello")
-    return render(request, "register.html")
+        form = RegisterForm(request.POST)
 
-def index(request):
+        if form.is_valid():
+            print('valid')
+            form.save()
+            return render(request, 'login.html')
+    else:
+        form = RegisterForm()
+
+    errors = []
+    for key, item in form.errors.items():
+        errors.append(item)
+    return render(request, 'register.html', context={'errors': errors})
+
+def combine(request):
     dicts = {"models": ["Model1", "Model2", "均值方差模型", "Model3"]}
-    return render(request, "index.html", dicts)
+    return render(request, "combine.html", dicts)
 
 
 @csrf_exempt
 def search(request):
     if request.method == "POST":
         print(json.loads(request.body.decode('utf-8')))
-        print('PPPPOST')
     print(request.POST)
     return HttpResponse("Hello")
 
