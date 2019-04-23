@@ -149,7 +149,7 @@ function sortSelect(elementID) {
         tmpAry[i][0] = obj.options[i].text;
         tmpAry[i][1] = obj.options[i].value;
     }
-    tmpAry.sort();
+    // tmpAry.sort();
     while (obj.options.length > 0) {
         obj.options[0] = null;
     }
