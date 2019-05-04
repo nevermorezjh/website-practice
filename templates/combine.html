@@ -414,10 +414,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var stockPool = getStockPool();
-        var restrictPool = getRestrictPool();
+        var restrictPool = [];
         console.log(stockPool);
         initializeStockPool(stockPool);
-        initializeRestrictPool(restrictPool);
         var modelType = "均值方差模型";
         var restrictType = "个性化约束";
 

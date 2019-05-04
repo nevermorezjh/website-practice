@@ -14,22 +14,6 @@ function getStockPool() {
     return stockPool;
 }
 
-function getRestrictPool() {
-    var restrictPool = null;
-    $.ajax({
-        url: 'get_restrict_stocks',
-        type: 'get',
-        async: false,
-        success: function (data) {
-            restrictPool = data;
-        },
-        error: function (data) {
-            console.log('fail');
-        }
-    });
-    return restrictPool;
-}
-
 function initializeStockPool(stockPool) {
     for (var key in stockPool) {
         $('#unselected-stockPool').append('<option value="' + key + '">' + key + '</option>');
@@ -45,11 +29,13 @@ function initializeRestrictPool(restrictPool) {
 function selectOneStock() {
     var unselectedStocks = document.getElementById("unselected-stocks");
     var selectedStocks = document.getElementById("selected-stocks");
+    var restrictStockspool = document.getElementById("unselected-restrict-stocks");
     var index = unselectedStocks.selectedIndex;
     if (index !== -1) {
         var value = unselectedStocks.options[index].value;
         var text = unselectedStocks.options[index].text;
         selectedStocks.add(new Option(text, value));
+        restrictStockspool.add(new Option(text, value));
         unselectedStocks.options.remove(index);
 
         sortSelect("unselected-stocks");
@@ -59,10 +45,10 @@ function selectOneStock() {
 
 function selectAllStocks() {
     var unselectedStocks = getAllOptions("unselected-stocks");
-    var selectedStocks = getAllOptions("selected-stocks");
 
     removeAllOptions("unselected-stocks");
     addOptions("selected-stocks", unselectedStocks);
+    addOptions("unselected-restrict-stocks", unselectedStocks);
     sortSelect("selected-stocks");
 
 }
@@ -70,12 +56,14 @@ function selectAllStocks() {
 function removeOneStock() {
     var unselectedStocks = document.getElementById("unselected-stocks");
     var selectedStocks = document.getElementById("selected-stocks");
+    var restrictStockspool = document.getElementById("unselected-restrict-stocks");
     var index = selectedStocks.selectedIndex;
     if (index !== -1) {
         var value = selectedStocks.options[index].value;
         var text = selectedStocks.options[index].text;
         unselectedStocks.add(new Option(text, value));
         selectedStocks.options.remove(index);
+        restrictStockspool.options.remove(index);
 
         sortSelect("unselected-stocks");
         sortSelect("selected-stocks");
@@ -89,6 +77,7 @@ function removeAllStocks() {
     console.log(selectedStocks);
 
     removeAllOptions("selected-stocks");
+    removeAllOptions("unselected-restrict-stocks");
     addOptions("unselected-stocks", selectedStocks);
     sortSelect("unselected-stocks");
 }

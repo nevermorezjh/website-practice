@@ -109,17 +109,6 @@ def get_stocks(request):
     return JsonResponse(stockpools)
 
 
-def get_restrict(request):
-    itemlist = ["Restrict1", "Restrict2", "Restrict3"]
-    stockpools = {}
-    for item in itemlist:
-        stocks = []
-        for i in range(30):
-            stocks.append(item + '-' + str(i))
-        stockpools[item] = stocks
-    return JsonResponse(stockpools)
-
-
 @csrf_exempt
 def combine_arrange(request):
     if request.method == 'POST':
