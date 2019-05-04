@@ -83,7 +83,7 @@ def get_stocks(request):
             for item in q:
                 try:
                     stocks.append(id_to_name[item])
-                except:
+                except _:
                     pass
             stocks = sorted(stocks, key=lambda x: ' '.join(lazy_pinyin(x)))
             stockpools[display] = stocks
@@ -95,9 +95,12 @@ def get_stocks(request):
         if not os.path.isfile('stocks.pkl'):
             save_data()
         statinfo = os.stat('stocks.pkl')
-        t = time.localtime(statinfo.st_ctime)
+        t = time.localtime(statinfo.st_mtime)
         now = time.localtime()
         if t.tm_mday != now.tm_mday or t.tm_mon != now.tm_mon or t.tm_year != now.tm_year:
+            print(now)
+            print(t)
+            print(111)
             save_data()
 
         with open('stocks.pkl', 'rb') as f:
