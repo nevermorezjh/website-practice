@@ -83,7 +83,7 @@ def get_stocks(request):
             for item in q:
                 try:
                     stocks.append(id_to_name[item])
-                except _:
+                except Exception as e:
                     pass
             stocks = sorted(stocks, key=lambda x: ' '.join(lazy_pinyin(x)))
             stockpools[display] = stocks
@@ -127,3 +127,8 @@ def combine_arrange(request):
         print(json_result['date'])
         return JsonResponse({"123": 314})
 # return HttpResponseRedirect("ok")
+
+
+def bl_model(request):
+    dicts = {"models": ["WIND行业类别", "xxx行业类别", ]}
+    return render(request, "BLmodel.html", dicts)
