@@ -113,7 +113,7 @@ function removeAllOptions(elementID) {
 function addOptions(elementID, pairs) {
     var obj = document.getElementById(elementID);
     for (var value in pairs) {
-        if(pairs.hasOwnProperty(value)) {
+        if (pairs.hasOwnProperty(value)) {
             obj.options.add(new Option(pairs[value], value));
         }
     }
@@ -122,7 +122,7 @@ function addOptions(elementID, pairs) {
 function getAllOptions(elementID) {
     var obj = document.getElementById(elementID);
     var options = {};
-    for (var i=0;i<obj.options.length;i++) {
+    for (var i = 0; i < obj.options.length; i++) {
         var text = obj.options[i].text;
         var value = obj.options[i].value;
         options[value] = text;
@@ -133,7 +133,7 @@ function getAllOptions(elementID) {
 function sortSelect(elementID) {
     var obj = document.getElementById(elementID);
     var tmpAry = [];
-    for (var i=0;i<obj.options.length;i++) {
+    for (var i = 0; i < obj.options.length; i++) {
         tmpAry[i] = [];
         tmpAry[i][0] = obj.options[i].text;
         tmpAry[i][1] = obj.options[i].value;
@@ -142,7 +142,7 @@ function sortSelect(elementID) {
     while (obj.options.length > 0) {
         obj.options[0] = null;
     }
-    for (i=0;i<tmpAry.length;i++) {
+    for (i = 0; i < tmpAry.length; i++) {
         obj.options[i] = new Option(tmpAry[i][0], tmpAry[i][1]);
     }
 }
@@ -196,4 +196,10 @@ function removeAllStocksRestrict() {
     removeAllOptions("selected-restrict-stocks");
     addOptions("unselected-restrict-stocks", selectedStocks);
     sortSelect("unselected-restrict-stocks");
+}
+
+function myCallbackFunction(updatedCell, updatedRow, oldValue) {
+    console.log("The new value for the cell is: " + updatedCell.data());
+    console.log("The old value for that cell was: " + oldValue);
+    console.log("The values for each cell in that row are: " + updatedRow.data());
 }

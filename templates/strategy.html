@@ -130,10 +130,12 @@
                             </div>
                         {% else %}
                             <div class="row">
-                                <a class="nav-link dropdown-toggle" href="{% url 'login' %}" role="button" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="{% url 'login' %}" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">登录</span>
                                 </a>
-                                <a class="nav-link dropdown-toggle" href="{% url 'register' %}" role="button" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="{% url 'register' %}" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">注册</span>
                                 </a>
                             </div>
@@ -187,20 +189,163 @@
                                 <h7 style="margin-top: 0.5%;">无风险利率：</h7>
                                 <input id="no-risk-rate" type="number" step="0.01" class="form-control"
                                        style="width: 8%;margin-right: 20px;">
-{#                                <h7 style="margin-top: 0.5%;">预期收益率计算方法：</h7>#}
-{#                                <div class="dropdown mb-4">#}
-{#                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"#}
-{#                                            id="expected-benefit"#}
-{#                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"#}
-{#                                            value="历史收益率均值法">#}
-{#                                        历史收益率均值法#}
-{#                                    </button>#}
-{#                                    <ul class="dropdown-menu animated--fade-in" aria-labelledby="expected-benefit"#}
-{#                                        id="calculation">#}
-{#                                        <li><a class="dropdown-item">历史收益率均值法</a></li>#}
-{#                                        <li><a class="dropdown-item">市场指数模型法</a></li>#}
-{#                                    </ul>#}
-{#                                </div>#}
+                            </div>
+
+                            <div id="bl-model" class="row col-md-10" style="margin-top: 1%;">
+
+                                <h7>行业类别：</h7>
+                                <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                            id="trade-types"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                                            style="width: 130px;">
+                                        {% if models %}
+                                            {{ models.0 }}
+                                        {% endif %}
+                                    </button>
+                                    <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types"
+                                        id="models">
+                                        {% for item in models %}
+                                            <li><a class="dropdown-item">{{ item }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                <h7>周期：</h7>
+                                <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="period"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                                            style="width: 50px;">
+                                        日
+                                    </button>
+                                    <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types"
+                                        id="models">
+                                        <li><a class="dropdown-item">日</a></li>
+                                        <li><a class="dropdown-item">月</a></li>
+                                        <li><a class="dropdown-item">年</a></li>
+                                    </ul>
+                                </div>
+
+
+                                <input data-provide="datepicker" id="from-date" value="01/01/2019" class="form-control"
+                                       style="width: 120px;margin-right: 1%;">
+                                <h7 style="margin-right: 1%;">至</h7>
+                                <input data-provide="datepicker" id="to-date" value="01/01/2019" class="form-control"
+                                       style="width: 120px;margin-right: 1%;">
+
+                                <button type="button" class="btn btn-light" style="margin-right: 1%;">确定</button>
+                                <button type="button" class="btn btn-light" style="margin-right: 1%;">前景分析</button>
+
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#first" style="margin-right: 1%;">BL模型调整
+                                </button>
+                                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="first"
+                                     aria-labelledby="mySmallModalLabel">
+                                    <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px;">
+                                        <div class="modal-content">
+                                            <div class="modal-header" id="modal-title">
+
+                                            </div>
+
+
+                                            <div class="modal-body">
+                                                <div class="row align-items-center col-md-12">
+                                                    <h7 style="margin-top: 0.5%;">市场期望收益：</h7>
+                                                    <input type="number" step="0.01" id="expect-profit" value="0"
+                                                           class="form-control"
+                                                           style="width: 80px;margin-right: 2%;">
+                                                    <h7 style="margin-top: 0.5%;">市场收益方差：</h7>
+                                                    <input type="number" step="0.01" id="profit-var" value="0.4"
+                                                           class="form-control"
+                                                           style="width: 80px;margin-right: 2%;">
+                                                    <h7 style="margin-top: 0.5%;">无风险利率：</h7>
+                                                    <input type="number" step="0.01" id="profit-var" value="0.4"
+                                                           class="form-control"
+                                                           style="width: 80px;margin-right: 2%;">
+
+                                                </div>
+                                                <div class="chart-area" style="height:500px;overflow:auto; ">
+                                                    <canvas id="myChart"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer" id="first-footer">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#next" data-dismiss="modal">下一步
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" tabindex="-1" role="dialog" id="next">
+                                    <div class="modal-dialog" style="max-width: 1300px;">
+                                        <div class="modal-content">
+                                            <div class="modal-header" id="modal-title">
+
+                                            </div>
+                                            <div class="modal-body col-md-20">
+                                                <div class="row">
+                                                    <div class="table-responsive col-md-8">
+                                                        <table class="table table-bordered" id="point-set" width="100%"
+                                                               cellspacing="0">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>WIND医疗保健</th>
+                                                                <th>WIND公用事业</th>
+                                                                <th>WIND能源</th>
+                                                                <th>WIND材料</th>
+                                                                <th>观点收益（超额）</th>
+                                                                <th>观点收益下限</th>
+                                                                <th>观点收益上限</th>
+                                                                <th>信心水平</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="table-responsive col-md-4">
+                                                        <table class="table table-bordered" id="prospective"
+                                                               width="100%"
+                                                               cellspacing="0">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>行业名称</th>
+                                                                <th>分析结果</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer" id="first-footer">
+                                                <button type="button" class="btn btn-light">插入观点数量
+                                                </button>
+                                                <input type="number" step="1" id="point-num" value="1"
+                                                       class="form-control"
+                                                       style="width: 80px;margin-right: 2%;">
+                                                <button type="button" class="btn btn-light">删除所选
+                                                </button>
+                                                <button type="button" class="btn btn-light">清空观点
+                                                </button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                        data-toggle="modal"
+                                                        data-target="#first">
+                                                    上一步
+                                                </button>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">完成
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
 
 
@@ -478,14 +623,18 @@
         $(function () {
             $("#models").on('click', 'li a', function () {
                 $("#model-types").text($(this).text());
+
                 if ($("#model-types").text() === "均值方差模型" && modelType !== "均值方差模型") {
                     {#$("#restrict-stocks").hide();#}
                     $("#mean-mse-model").toggle("slow");
                     modelType = "均值方差模型";
+                    console.log(modelType);
                 }
-                if ($("#model-types").text() !== "均值方差模型" && modelType === "均值方差模型") {
+                if ($("#model-types").text() === "B-L模型" && modelType !== "B-L模型") {
                     $("#mean-mse-model").toggle("slow");
+                    $("#bl-model").toggle("slow");
                     modelType = $(this).text();
+                    console.log(modelType)
                 }
             });
             $("#restrict").on('click', 'li a', function () {

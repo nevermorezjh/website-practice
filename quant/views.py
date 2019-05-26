@@ -51,7 +51,7 @@ def register(request):
 
 
 def combine(request):
-    dicts = {"models": ["均值方差模型", "等权重模型",]}
+    dicts = {"models": ["均值方差模型", "等权重模型", "B-L模型"]}
     return render(request, "combine.html", dicts)
 
 def strategy(request):

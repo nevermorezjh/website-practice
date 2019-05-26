@@ -223,7 +223,142 @@
 
                         </div>
 
+                        <div id="bl-model" class="row col-md-10" style="margin-top: 1%;">
 
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#first" style="margin-right: 1%;">BL模型调整
+                            </button>
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="first"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
+
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="row col-md-10">
+                                                <h7 style="margin-top: 0.5%;">市场期望收益：</h7>
+                                                <input id="market-expect-profit" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       class="form-control"
+                                                       style="width: 80px;margin-right: 20px;">
+
+                                                <h7 style="margin-top: 0.5%;">市场收益方差：</h7>
+                                                <input id="market-profit-var" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       max="1"
+                                                       class="form-control"
+                                                       style="width: 80px;margin-right: 20px;">
+                                                <h7 style="margin-top: 0.5%;">无风险利率：</h7>
+                                                <input id="no-risk-profit-rate" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       max="1"
+                                                       class="form-control"
+                                                       style="width: 80px;margin-right: 20px;">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" id="first-footer">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#next" data-dismiss="modal">下一步
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="next"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
+
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div id="stocks" class="row align-items-center">
+                                                <div class="col-md-2 col-xs-2">
+                                                    <h6 class="align-items-center">股票池</h6>
+                                                    <select id="xxx" name="stocks" multiple
+                                                            class="form-control"
+                                                            style="height: 160px; margin-right: 20px;"></select>
+                                                </div>
+                                                <div class="col-md-2 col-xs-2">
+                                                    <h7>待选股票</h7>
+                                                    <select id="xxx" name="stocks" multiple
+                                                            class="form-control"
+                                                            style="height: 160px;"></select>
+                                                </div>
+                                                <div class="center-block control-buttons"
+                                                     style="margin-top: 1.6%; margin-left: 1%;">
+                                                    <div class="row">
+                                                        <button type="button" id="xxxx"
+                                                                class="btn btn-default btn-success btn-selectbox"><i
+                                                                class="fas fa-check"></i></button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button type="button" id="stock-selectOne"
+                                                                class="btn btn-default btn-primary btn-selectbox"><i
+                                                                class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button type="button" id="stock-removeOne"
+                                                                class="btn btn-default btn-primary btn-selectbox"><i
+                                                                class="fas fa-arrow-left"></i></button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button type="button" id="stock-removeAll"
+                                                                class="btn btn-default btn-danger btn-selectbox"><i
+                                                                class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2" style="margin-left: 1.2%;">
+                                                    <h6>已选股票</h6>
+                                                    <select id="selected-stocks" name="stocks" multiple
+                                                            class="form-control"
+                                                            style="height: 160px;"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer" id="first-footer">
+                                            <button type="button" class="btn btn-light" data-toggle="modal"
+                                                    data-target="#first" data-dismiss="modal">上一步
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#last" data-dismiss="modal">下一步
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="last"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
+
+                                        </div>
+
+
+                                        <div class="modal-body">
+
+
+                                        </div>
+                                        <div class="modal-footer" id="first-footer">
+                                            <button type="button" class="btn btn-light" data-toggle="modal"
+                                                    data-target="#next" data-dismiss="modal">上一步
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-dismiss="modal">完成
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -297,7 +432,8 @@
                             <input type="number" step="0.01" id="single-mini-weight" value="0" class="form-control"
                                    style="width: 100px;margin-right: 20px;">
                             <h7 style="margin-top: 0.5%;">最大权重：</h7>
-                            <input type="number" step="0.01" id="single-maxi-weight" value="0.4" class="form-control"
+                            <input type="number" step="0.01" id="single-maxi-weight" value="0.4"
+                                   class="form-control"
                                    style="width: 100px;margin-right: 20px;">
                         </div>
 
@@ -354,7 +490,8 @@
                             </div>
 
                             <div class="col-md-5 table-responsive">
-                                <table class="table table-bordered" id="restrict-table" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="restrict-table" width="100%"
+                                       cellspacing="0">
                                     <thead>
                                     <tr>
                                         <th>约束类型</th>
@@ -433,7 +570,7 @@
 <script src="{% static "vendor/datatables/jquery.dataTables.min.js" %}"></script>
 <script src="{% static "vendor/chart.js/Chart.min.js" %}"></script>
 <script src="{% static "vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
-
+<script src="{% static "js/dataTables.cellEdit.js" %}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         var stockPool = getStockPool();
@@ -454,7 +591,14 @@
             $('#modal-title').text('Now ' + date.getHours() + ": " + date.getMinutes() + ": " + date.getSeconds());
         });
 
-        $('#restrict-table').DataTable();
+
+        var myTable = $('#restrict-table').DataTable();
+        myTable.MakeCellsEditable({
+            "onUpdate": myCallbackFunction
+        });
+
+
+
         var restrictTable = $('#restrict-table').DataTable();
 
         $('#restrict-table').on('dblclick', 'tbody tr', function () {
@@ -504,12 +648,22 @@
             $("#models").on('click', 'li a', function () {
                 $("#model-types").text($(this).text());
                 if ($("#model-types").text() === "均值方差模型" && modelType !== "均值方差模型") {
-                    {#$("#restrict-stocks").hide();#}
+                    if (modelType === "B-L模型")
+                        $("#bl-model").toggle("slow");
                     $("#mean-mse-model").toggle("slow");
                     modelType = "均值方差模型";
                 }
-                if ($("#model-types").text() !== "均值方差模型" && modelType === "均值方差模型") {
-                    $("#mean-mse-model").toggle("slow");
+                if ($("#model-types").text() === "B-L模型" && modelType !== "B-L模型") {
+                    if (modelType === "均值方差模型")
+                        $("#mean-mse-model").toggle("slow");
+                    $("#bl-model").toggle("slow");
+                    modelType = $(this).text();
+                }
+                if ($("#model-types").text() === "等权重模型" && modelType !== "等权重模型") {
+                    if (modelType === "均值方差模型")
+                        $("#mean-mse-model").toggle("slow");
+                    if (modelType === "B-L模型")
+                        $("#bl-model").toggle("slow");
                     modelType = $(this).text();
                 }
             });
@@ -542,6 +696,7 @@
         });
 
         $("#single-restrict").hide();
+        $("#bl-model").hide();
         {#$("#mean-mse-model").hide();#}
 
         $('.datepicker').datepicker({
@@ -609,6 +764,7 @@
                 }
             }
         });
+
 
     });
 </script>
