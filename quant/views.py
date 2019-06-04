@@ -132,3 +132,11 @@ def combine_arrange(request):
 def bl_model(request):
     dicts = {"models": ["WIND行业类别", "xxx行业类别", ]}
     return render(request, "BLmodel.html", dicts)
+
+
+def get_trades(request):
+    tradepools = {
+        '申万一级行业': ['能源', '材料', '工业', '可选消费指', '日常消费', '医疗保健', '金融', '信息技术', '电信服务', '公用事业', '房地产']
+    }
+
+    return JsonResponse(tradepools)

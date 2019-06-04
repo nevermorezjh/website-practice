@@ -276,45 +276,45 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <div id="stocks" class="row align-items-center">
+                                            <div id="trades" class="row align-items-center">
                                                 <div class="col-md-2 col-xs-2">
-                                                    <h6 class="align-items-center">股票池</h6>
-                                                    <select id="xxx" name="stocks" multiple
+                                                    <h6 class="align-items-center">行业池</h6>
+                                                    <select id="unselected-tradePool" name="trades" multiple
                                                             class="form-control"
                                                             style="height: 160px; margin-right: 20px;"></select>
                                                 </div>
                                                 <div class="col-md-2 col-xs-2">
-                                                    <h7>待选股票</h7>
-                                                    <select id="xxx" name="stocks" multiple
+                                                    <h7>待选行业</h7>
+                                                    <select id="unselected-trades" name="trades" multiple
                                                             class="form-control"
                                                             style="height: 160px;"></select>
                                                 </div>
                                                 <div class="center-block control-buttons"
                                                      style="margin-top: 1.6%; margin-left: 1%;">
                                                     <div class="row">
-                                                        <button type="button" id="xxxx"
+                                                        <button type="button" id="trade-selectAll"
                                                                 class="btn btn-default btn-success btn-selectbox"><i
                                                                 class="fas fa-check"></i></button>
                                                     </div>
                                                     <div class="row">
-                                                        <button type="button" id="stock-selectOne"
+                                                        <button type="button" id="trade-selectOne"
                                                                 class="btn btn-default btn-primary btn-selectbox"><i
                                                                 class="fas fa-arrow-right"></i></button>
                                                     </div>
                                                     <div class="row">
-                                                        <button type="button" id="stock-removeOne"
+                                                        <button type="button" id="trade-removeOne"
                                                                 class="btn btn-default btn-primary btn-selectbox"><i
                                                                 class="fas fa-arrow-left"></i></button>
                                                     </div>
                                                     <div class="row">
-                                                        <button type="button" id="stock-removeAll"
+                                                        <button type="button" id="trade-removeAll"
                                                                 class="btn btn-default btn-danger btn-selectbox"><i
                                                                 class="fas fa-trash"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2" style="margin-left: 1.2%;">
-                                                    <h6>已选股票</h6>
-                                                    <select id="selected-stocks" name="stocks" multiple
+                                                    <h6>已选行业</h6>
+                                                    <select id="selected-trades" name="stocks" multiple
                                                             class="form-control"
                                                             style="height: 160px;"></select>
                                                 </div>
@@ -326,6 +326,7 @@
                                                     data-target="#first" data-dismiss="modal">上一步
                                             </button>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    id="build-trade-table"
                                                     data-target="#last" data-dismiss="modal">下一步
                                             </button>
                                         </div>
@@ -343,6 +344,13 @@
 
 
                                         <div class="modal-body">
+                                            <div class="col-md-14 table-responsive">
+                                                <table class="table table-bordered" id="trade-table" width="100%"
+                                                       cellspacing="0">
+
+
+                                                </table>
+                                            </div>
 
 
                                         </div>
@@ -574,14 +582,20 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var stockPool = getStockPool();
+        var tradePool = getTradesPool();
+        var first = true;
         var restrictPool = [];
         console.log(stockPool);
-        initializeStockPool(stockPool);
+        initializePool(stockPool, '#unselected-stockPool');
+        initializePool(tradePool, '#unselected-tradePool');
         var modelType = "均值方差模型";
         var restrictType = "个性化约束";
 
         document.getElementById("unselected-stockPool").onchange = function () {
             unselectedStockPoolOnChange(this, stockPool);
+        };
+        document.getElementById("unselected-tradePool").onchange = function () {
+            unselectedTradePoolOnChange(this, tradePool);
         };
 
         $('#calculate-modal').on('show.bs.modal', function (event) {
@@ -592,17 +606,17 @@
         });
 
 
-        var myTable = $('#restrict-table').DataTable();
-        myTable.MakeCellsEditable({
-            "onUpdate": myCallbackFunction
-        });
-
-
-
         var restrictTable = $('#restrict-table').DataTable();
+        {#var tradeTable = $("#trade-table").DataTable();#}
+
 
         $('#restrict-table').on('dblclick', 'tbody tr', function () {
             restrictTable.row(this).remove().draw(true);
+        });
+
+        $("#build-trade-table").on('click', function () {
+            buildTradeTable(first);
+            first = false;
         });
 
         $("#stock-selectOne").on('click', function () {
@@ -622,6 +636,25 @@
         });
         $('#selected-stocks').dblclick(function () {
             removeOneStock();
+        });
+
+        $("#trade-selectOne").on('click', function () {
+            selectOneTrade();
+        });
+        $("#trade-removeOne").on('click', function () {
+            removeOneTrade();
+        });
+        $("#trade-selectAll").on('click', function () {
+            selectAllTrades();
+        });
+        $("#trade-removeAll").on('click', function () {
+            removeAllTrades();
+        });
+        $('#unselected-trades').dblclick(function () {
+            selectOneTrade();
+        });
+        $('#selected-trades').dblclick(function () {
+            removeOneTrade();
         });
 
         $('#restrict-stock-selectOne').on('click', function () {
