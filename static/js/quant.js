@@ -22,6 +22,13 @@ function getTradesPool() {
         async: false,
         success: function (data) {
             tradePool = data;
+            var unselectedTrades = $("#unselected-trades");
+            var unselectedRestrictTrades = $("#unselected-restrict-trades");
+            var trades = tradePool['申万一级行业'];
+            for (var idx in trades) {
+                unselectedTrades.append('<option value="' + trades[idx] + '">' + trades[idx] + '</option>');
+                unselectedRestrictTrades.append('<option value="' + trades[idx] + '">' + trades[idx] + '</option>');
+            }
         },
         error: function (data) {
             console.log('fail');
@@ -88,7 +95,6 @@ function removeOneStock() {
 }
 
 function removeAllStocks() {
-    var unselectedStocks = getAllOptions("unselected-stocks");
     var selectedStocks = getAllOptions("selected-stocks");
     console.log(selectedStocks);
 
@@ -145,7 +151,6 @@ function selectAllTrades() {
     removeAllOptions("unselected-trades");
     addOptions("selected-trades", unselectedTrades);
     sortSelect("selected-trades");
-
 }
 
 function removeOneTrade() {
@@ -161,40 +166,14 @@ function removeOneTrade() {
         sortSelect("unselected-trades");
         sortSelect("selected-trades");
     }
-
 }
 
 function removeAllTrades() {
-    var unselectedTrades = getAllOptions("unselected-trades");
     var selectedTrades = getAllOptions("selected-trades");
     console.log(selectedTrades);
 
     removeAllOptions("selected-trades");
     addOptions("unselected-trades", selectedTrades);
-    sortSelect("unselected-trades");
-}
-
-function unselectedTradePoolOnChange(widget, tradePool) {
-    var unselectedTrades = $("#unselected-trades");
-    var index = widget.selectedIndex;
-    var value = widget.options[index].value;
-    unselectedTrades.find('option').remove();
-    var trades = tradePool[value];
-
-    var selectedTrades = [];
-    var temp = $("#selected-trades")[0];
-    if (temp.options !== null) {
-        for (var i = 0; i < temp.options.length; i++) {
-            selectedTrades[i] = temp.options[i].value;
-        }
-    }
-    for (idx in trades) {
-        var trade = trades[idx];
-        if (!selectedTrades.includes(trade)) {
-            unselectedTrades.append('<option value="' + trades[idx] + '">' + trades[idx] + '</option>');
-        }
-    }
-
     sortSelect("unselected-trades");
 }
 
@@ -258,7 +237,6 @@ function selectOneStockRestrict() {
 
 function selectAllStocksRestrict() {
     var unselectedStocks = getAllOptions("unselected-restrict-stocks");
-    var selectedStocks = getAllOptions("selected-restrict-stocks");
 
     removeAllOptions("unselected-restrict-stocks");
     addOptions("selected-restrict-stocks", unselectedStocks);
@@ -283,7 +261,6 @@ function removeOneStockRestrict() {
 }
 
 function removeAllStocksRestrict() {
-    var unselectedStocks = getAllOptions("unselected-restrict-stocks");
     var selectedStocks = getAllOptions("selected-restrict-stocks");
 
     removeAllOptions("selected-restrict-stocks");
@@ -296,26 +273,75 @@ function myCallbackFunction(updatedCell, updatedRow, oldValue) {
 }
 
 
+
+
+//
+
+function selectOneRestrictTrade() {
+    var unselectedTrades = document.getElementById("unselected-restrict-trades");
+    var selectedTrades = document.getElementById("selected-restrict-trades");
+    var index = unselectedTrades.selectedIndex;
+    if (index !== -1) {
+        var value = unselectedTrades.options[index].value;
+        var text = unselectedTrades.options[index].text;
+        selectedTrades.add(new Option(text, value));
+        unselectedTrades.options.remove(index);
+
+        sortSelect("unselected-restrict-trades");
+        sortSelect("selected-restrict-trades");
+    }
+}
+
+function selectAllRestrictTrades() {
+    var unselectedTrades = getAllOptions("unselected-restrict-trades");
+
+    removeAllOptions("unselected-restrict-trades");
+    addOptions("selected-restrict-trades", unselectedTrades);
+    sortSelect("selected-restrict-trades");
+}
+
+function removeOneRestrictTrade() {
+    var unselectedTrades = document.getElementById("unselected-restrict-trades");
+    var selectedTrades = document.getElementById("selected-restrict-trades");
+    var index = selectedTrades.selectedIndex;
+    if (index !== -1) {
+        var value = selectedTrades.options[index].value;
+        var text = selectedTrades.options[index].text;
+        unselectedTrades.add(new Option(text, value));
+        selectedTrades.options.remove(index);
+
+        sortSelect("unselected-restrict-trades");
+        sortSelect("selected-restrict-trades");
+    }
+}
+
+function removeAllRestrictTrades() {
+    var selectedTrades = getAllOptions("selected-restrict-trades");
+
+    removeAllOptions("selected-restrict-trades");
+    addOptions("unselected-restrict-trades", selectedTrades);
+    sortSelect("unselected-restrict-trades");
+}
+
+//
+
 function buildTradeTable(first) {
     if (!first) {
         $("#trade-table").DataTable().clear().destroy();
         $("#trade-table").empty();
-        console.log('clear');
     }
     var options = getAllOptions("selected-trades");
     columns = new Array();
     data = new Array();
+    // cd = [];
     for (var key in options) {
-        console.log({"title": key});
-        columns.push({"title": key, "orderable": false});
+        columns.push({"title": key, "orderable": false, });
         data.push(1.0);
     }
-    console.log(data);
-    console.log(columns);
-    tradeTable = $('#trade-table').DataTable( {
+    tradeTable = $('#trade-table').removeAttr('width').DataTable({
         "data": [data],
         "columns": columns,
-        searching: false, paging: false, info: false
+        searching: false, paging: false, info: false,
     });
     tradeTable.MakeCellsEditable({
         "onUpdate": myCallbackFunction
