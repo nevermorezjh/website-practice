@@ -171,10 +171,32 @@
                             <h7>回溯时长：</h7>
                             <input type="number" class="form-control" id="date-back" value="30"
                                    style="width: 8%;margin-right: 20px;">
+                            <h7 style="margin-top: 0.5%;">无风险利率：</h7>
+                            <input id="g_rf" type="number" step="0.01" value="0.015" min="0" max="1"
+                                   class="form-control" style="width: 8%;margin-right: 20px;">
                             <!-- Small modal -->
+
+                            <h7>基准指数：</h7>
+                            <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="g-benmarks"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                                        style="width: 120px;">
+                                    {% if g_benchmarks %}
+                                        {{ g_benchmarks.0 }}
+                                    {% endif %}
+                                </button>
+                                <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types"
+                                    id="g-benmark">
+                                    {% for item in g_benchmarks %}
+                                        <li><a class="dropdown-item">{{ item }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target=".bs-example-modal-sm">试算
                             </button>
+
                             <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="calculate-modal"
                                  aria-labelledby="mySmallModalLabel">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -202,21 +224,21 @@
 
                         </div>
 
-                        <div class="row align-items-center col-md-10" id="model-parameters">
-                            <div id="mean-mse-model" class="row col-md-10" style="margin-top: 1%;">
-                                <h7 style="margin-top: 0.5%;">风险厌恶系数：</h7>
-                                <input id="risk-hate" type="number" step="1" min="1" max="8" value="1"
-                                       class="form-control"
-                                       style="width: 8%;margin-right: 20px;">
-
-                                <h7 style="margin-top: 0.5%;">无风险利率：</h7>
-                                <input id="no-risk-rate" type="number" step="0.01" value="0.03" min="0" max="1"
-                                       class="form-control"
-                                       style="width: 8%;margin-right: 20px;">
-                            </div>
-
-
-                        </div>
+                        {#                        <div class="row align-items-center col-md-10" id="model-parameters">#}
+                        {#                            <div id="mean-mse-model" class="row col-md-10" style="margin-top: 1%;">#}
+                        {#                                <h7 style="margin-top: 0.5%;">风险厌恶系数：</h7>#}
+                        {#                                <input id="risk-hate" type="number" step="1" min="1" max="8" value="1"#}
+                        {#                                       class="form-control"#}
+                        {#                                       style="width: 8%;margin-right: 20px;">#}
+                        {##}
+                        {#                                <h7 style="margin-top: 0.5%;">无风险利率：</h7>#}
+                        {#                                <input id="no-risk-rate" type="number" step="0.01" value="0.03" min="0" max="1"#}
+                        {#                                       class="form-control"#}
+                        {#                                       style="width: 8%;margin-right: 20px;">#}
+                        {#                            </div>#}
+                        {##}
+                        {##}
+                        {#                        </div>#}
 
                         <div id="bl-model" class="row col-md-10" style="margin-top: 1%;">
 
@@ -310,54 +332,54 @@
                                             </div>
                                         </div>
 
-                                            <div class="modal-footer" id="first-footer">
-                                                <button type="button" class="btn btn-light" data-toggle="modal"
-                                                        data-target="#first" data-dismiss="modal">上一步
-                                                </button>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        id="build-trade-table"
-                                                        data-target="#last" data-dismiss="modal">下一步
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="last"
-                                 aria-labelledby="mySmallModalLabel">
-                                <div class="modal-dialog modal-lg" role="document" style="max-width: 750px;">
-                                    <div class="modal-content">
-                                        <div class="modal-header" id="modal-title">
-
-                                        </div>
-
-
-                                        <div class="modal-body">
-                                            <div class="table-responsive ">
-                                                <table class="table table-bordered " id="trade-table" width="80%"
-                                                       cellspacing="0" style="margin: 0 auto;">
-
-
-                                                </table>
-                                            </div>
-
-
-                                        </div>
                                         <div class="modal-footer" id="first-footer">
                                             <button type="button" class="btn btn-light" data-toggle="modal"
-                                                    data-target="#next" data-dismiss="modal">上一步
+                                                    data-target="#first" data-dismiss="modal">上一步
                                             </button>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                    data-dismiss="modal">完成
+                                                    id="build-trade-table"
+                                                    data-target="#last" data-dismiss="modal">下一步
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+
+                        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="last"
+                             aria-labelledby="mySmallModalLabel">
+                            <div class="modal-dialog modal-lg" role="document" style="max-width: 750px;">
+                                <div class="modal-content">
+                                    <div class="modal-header" id="modal-title">
+
+                                    </div>
+
+
+                                    <div class="modal-body">
+                                        <div class="table-responsive ">
+                                            <table class="table table-bordered " id="trade-table" width="80%"
+                                                   cellspacing="0" style="margin: 0 auto;">
+
+
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="modal-footer" id="first-footer">
+                                        <button type="button" class="btn btn-light" data-toggle="modal"
+                                                data-target="#next" data-dismiss="modal">上一步
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-dismiss="modal">完成
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+                </div>
 
 
                 <!-- stock pool -->
@@ -408,32 +430,6 @@
 
                 <div class="card border-left-primary form-group">
                     <div class="card-body shadow">
-                        {#                        <div class="row align-items-center col-md-4 form-group">#}
-                        {#                            <h6>股票约束：</h6>#}
-                        {#                            <div class="dropdown mb-3" style="margin-top: 0.5%;">#}
-                        {#                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"#}
-                        {#                                        id="restrict-types"#}
-                        {#                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"#}
-                        {#                                        style="width: 120px;">#}
-                        {#                                    个性化约束#}
-                        {#                                </button>#}
-                        {#                                <ul class="dropdown-menu animated--fade-in" aria-labelledby="restrict-types"#}
-                        {#                                    id="restrict">#}
-                        {#                                    <li><a class="dropdown-item">个性化约束</a></li>#}
-                        {#                                    <li><a class="dropdown-item">统一约束</a></li>#}
-                        {#                                </ul>#}
-                        {#                            </div>#}
-                        {#                        </div>#}
-                        {##}
-                        {#                        <div id="single-restrict" class="row col-md-8 form-group">#}
-                        {#                            <h7 style="margin-top: 0.5%;">最小权重：</h7>#}
-                        {#                            <input type="number" step="0.01" id="single-mini-weight" value="0" class="form-control"#}
-                        {#                                   style="width: 100px;margin-right: 20px;">#}
-                        {#                            <h7 style="margin-top: 0.5%;">最大权重：</h7>#}
-                        {#                            <input type="number" step="0.01" id="single-maxi-weight" value="0.4"#}
-                        {#                                   class="form-control"#}
-                        {#                                   style="width: 100px;margin-right: 20px;">#}
-                        {#                        </div>#}
 
                         <div id="restrict-stocks" class="row col-md-16 form-group">
                             <div class="col-md-2">
@@ -543,25 +539,37 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- submit -->
-            <div class="form-group">
-                <btn type="button" id="submit-btn" class="btn btn-default btn-success col-md-1">
-                    submit
-                </btn>
-            </div>
 
-            <div class="card border-left-primary form-group" style="height: 1000px;">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                <!-- submit -->
+                <div class="card form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" id="submit-btn">submit
+                    </button>
+                    <img src="{% static "img/loading.gif" %}" id="loading" style="display:none">
                 </div>
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myChart"></canvas>
+
+                <div class="card border-left-primary form-group" id="gegu-table" style="display: none">
+                    <div class="card-body">
+                        <div class="table-responsive form-group">
+                            <table id="gegu" class="table table-light" width="100%" cellspacing="0">
+
+                            </table>
+                        </div>
                     </div>
                 </div>
 
+
+                <div class="card border-left-primary form-group" style="height: 1000px;">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>
@@ -609,6 +617,8 @@
 <script src="{% static "js/dataTables.cellEdit.js" %}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+
         var stockPool = getStockPool();
         var tradePool = getTradesPool();
         var first = true;
@@ -743,7 +753,14 @@
                         $("#bl-model").toggle("slow");
                     modelType = $(this).text();
                 }
+                console.log($("#model-types").text());
             });
+
+            $("#g-benmark").on('click', 'li a', function () {
+                $("#g-benmarks").text($(this).text());
+                console.log($("#g-benmarks").text());
+            });
+
             $("#restrict").on('click', 'li a', function () {
                 $("#restrict-types").text($(this).text());
                 if ($("#restrict-types").text() === "统一约束" && restrictType !== "统一约束") {
@@ -792,24 +809,43 @@
             format: 'yyyy/mm/dd',
         });
 
+        var submitFirst = true;
         $('#submit-btn').click(function (e) {
-            e.preventDefault();
-            console.log("123");
+            {#e.preventDefault();#}
             // your statements;
-            var selectedStocks = getAllOptions("selected-stocks");
-            var selectedRestrictStocks = getAllOptions("selected-restrict-stocks");
-            var modelType = $("#model-types").text();
-            var date = document.getElementById("date").value;
-            var dateBack = document.getElementById("date-back").value;
-            var miniWeight = document.getElementById("mini-weight").value;
-            var maxiWeight = document.getElementById("maxi-weight").value;
-            console.log(selectedStocks);
-            console.log(selectedRestrictStocks);
-            console.log(modelType);
-            console.log(date);
-            console.log(dateBack);
-            console.log(miniWeight);
-            console.log(maxiWeight);
+            var g_endTime = $("#date").val();
+            var g_lookback = $("#date-back").val();
+            var options = getAllOptions("selected-stocks");
+            var g_code_list = [];
+            for (var item in options) {
+                {#console.log(item);#}
+                g_code_list.push(item);
+            }
+            var g_benchmark = $("#g-benmarks").text();
+
+            $('#loading').show();
+            var post_data = {
+                g_endTime: g_endTime,
+                g_code_list: g_code_list,
+                g_lookback: g_lookback,
+                g_benchmark: g_benchmark
+            };
+            $.ajax({
+                type: "POST",
+                url: 'combine_submit',
+                traditional: true,
+                data: post_data,
+                success: function (data) {
+                    $('#gegu-table').show();
+                    buildGeguTable(submitFirst, data['dataset'], data['columns']);
+                    submitFirst = false;
+                    $('#loading').hide();
+                },
+                error: function (xhr, status) {
+                    $('#loading').hide();
+                }
+            });
+
 
         });
 
@@ -852,7 +888,8 @@
         });
 
 
-    });
+    })
+    ;
 </script>
 
 </body>

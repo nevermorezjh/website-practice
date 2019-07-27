@@ -273,8 +273,6 @@ function myCallbackFunction(updatedCell, updatedRow, oldValue) {
 }
 
 
-
-
 //
 
 function selectOneRestrictTrade() {
@@ -331,11 +329,11 @@ function buildTradeTable(first) {
         $("#trade-table").empty();
     }
     var options = getAllOptions("selected-trades");
-    columns = new Array();
-    data = new Array();
+    var columns = new Array();
+    var data = new Array();
     // cd = [];
     for (var key in options) {
-        columns.push({"title": key, "orderable": false, });
+        columns.push({"title": key, "orderable": false,});
         data.push(1.0);
     }
     tradeTable = $('#trade-table').removeAttr('width').DataTable({
@@ -346,4 +344,55 @@ function buildTradeTable(first) {
     tradeTable.MakeCellsEditable({
         "onUpdate": myCallbackFunction
     });
+}
+
+
+function buildGeguTable(first, dataset, columns) {
+    if (!first) {
+        $('#gegu').DataTable().clear().destroy();
+        $('#gegu').empty();
+    }
+    tablecolumns = [];
+    for (var key in columns) {
+        tablecolumns.push({title: columns[key], orderable: false,});
+    }
+    $('#gegu').DataTable({
+        "sDom": '<"toolbar">frtip',
+        data: dataset,
+        columns: tablecolumns,
+        searching: false,
+        paging: false,
+        bPaginate: false,
+        bLengthChange: false,
+        bFilter: true,
+        bInfo: false,
+        bAutoWidth: false,
+        aaSorting: []
+    });
+    $("div.toolbar").html('<b>个股表格</b>');
+}
+
+function buildAbsolutePerformTable(first, dataset, columns) {
+    if (!first) {
+        $('#absolutePerform').DataTable().clear().destroy();
+        $('#absolutePerform').empty();
+    }
+    tablecolumns = [];
+    for (var key in columns) {
+        tablecolumns.push({title: columns[key], orderable: false,});
+    }
+    $('#absolutePerform').DataTable({
+        "sDom": '<"toolbar">frtip',
+        data: dataset,
+        columns: tablecolumns,
+        searching: false,
+        paging: false,
+        bPaginate: false,
+        bLengthChange: false,
+        bFilter: true,
+        bInfo: false,
+        bAutoWidth: false,
+        aaSorting: []
+    });
+    $("div.toolbar").html('<b>策略绝对表现</b>');
 }

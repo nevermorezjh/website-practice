@@ -77,11 +77,6 @@
                 <i class="fas fa-fw fa-table"></i>
                 <span>策略回测</span></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'bl-model' %}">
-                <i class="fas fa-fw fa-table"></i>
-                <span>BL模型</span></a>
-        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -170,186 +165,235 @@
                                 </ul>
                             </div>
 
-                            <h7>配置日期：</h7>
-                            <input data-provide="datepicker" id="date" value="01/01/2019" class="form-control"
+                            <h7>起始日期：</h7>
+                            <input data-provide="datepicker" id="g_startTime" value="01/01/2019" class="form-control"
+                                   style="width: 120px;margin-right: 20px;">
+                            <h7>结束日期：</h7>
+                            <input data-provide="datepicker" id="g_endTime" value="01/01/2019" class="form-control"
                                    style="width: 120px;margin-right: 20px;">
                             <h7>回溯时长：</h7>
-                            <input type="number" class="form-control" id="date-back" value="30"
+                            <input type="number" class="form-control" id="g_lookback" value="30"
                                    style="width: 8%;margin-right: 20px;">
+                            <!-- Small modal -->
 
-
-                        </div>
-
-                        <div class="row align-items-center col-md-10" id="model-parameters">
-                            <div id="mean-mse-model" class="row col-md-10" style="margin-top: 1%;">
-                                <h7 style="margin-top: 0.5%;">风险厌恶系数：</h7>
-                                <input id="risk-hate" type="number" step="1" min="1" max="8" class="form-control"
-                                       style="width: 8%;margin-right: 20px;">
-
-                                <h7 style="margin-top: 0.5%;">无风险利率：</h7>
-                                <input id="no-risk-rate" type="number" step="0.01" class="form-control"
-                                       style="width: 8%;margin-right: 20px;">
-                            </div>
-
-                            <div id="bl-model" class="row col-md-10" style="margin-top: 1%;">
-
-                                <h7>行业类别：</h7>
-                                <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
-                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                            id="trade-types"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-                                            style="width: 130px;">
-                                        {% if models %}
-                                            {{ models.0 }}
-                                        {% endif %}
-                                    </button>
-                                    <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types"
-                                        id="models">
-                                        {% for item in models %}
-                                            <li><a class="dropdown-item">{{ item }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-
-                                <h7>周期：</h7>
-                                <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
-                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="period"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-                                            style="width: 50px;">
-                                        日
-                                    </button>
-                                    <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types"
-                                        id="models">
-                                        <li><a class="dropdown-item">日</a></li>
-                                        <li><a class="dropdown-item">月</a></li>
-                                        <li><a class="dropdown-item">年</a></li>
-                                    </ul>
-                                </div>
-
-
-                                <input data-provide="datepicker" id="from-date" value="01/01/2019" class="form-control"
-                                       style="width: 120px;margin-right: 1%;">
-                                <h7 style="margin-right: 1%;">至</h7>
-                                <input data-provide="datepicker" id="to-date" value="01/01/2019" class="form-control"
-                                       style="width: 120px;margin-right: 1%;">
-
-                                <button type="button" class="btn btn-light" style="margin-right: 1%;">确定</button>
-                                <button type="button" class="btn btn-light" style="margin-right: 1%;">前景分析</button>
-
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#first" style="margin-right: 1%;">BL模型调整
+                            <h7>基准指数：</h7>
+                            <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="g-benmarks"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                                        style="width: 120px;">
+                                    {% if g_benchmarks %}
+                                        {{ g_benchmarks.0 }}
+                                    {% endif %}
                                 </button>
-                                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="first"
-                                     aria-labelledby="mySmallModalLabel">
-                                    <div class="modal-dialog modal-lg" role="document" style="max-width: 1000px;">
-                                        <div class="modal-content">
-                                            <div class="modal-header" id="modal-title">
+                                <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types"
+                                    id="g-benmark">
+                                    {% for item in g_benchmarks %}
+                                        <li><a class="dropdown-item">{{ item }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
 
-                                            </div>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target=".bs-example-modal-sm">试算
+                            </button>
 
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="calculate-modal"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
 
-                                            <div class="modal-body">
-                                                <div class="row align-items-center col-md-12">
-                                                    <h7 style="margin-top: 0.5%;">市场期望收益：</h7>
-                                                    <input type="number" step="0.01" id="expect-profit" value="0"
-                                                           class="form-control"
-                                                           style="width: 80px;margin-right: 2%;">
-                                                    <h7 style="margin-top: 0.5%;">市场收益方差：</h7>
-                                                    <input type="number" step="0.01" id="profit-var" value="0.4"
-                                                           class="form-control"
-                                                           style="width: 80px;margin-right: 2%;">
-                                                    <h7 style="margin-top: 0.5%;">无风险利率：</h7>
-                                                    <input type="number" step="0.01" id="profit-var" value="0.4"
-                                                           class="form-control"
-                                                           style="width: 80px;margin-right: 2%;">
-
+                                        </div>
+                                        <div class="modal-body">
+                                            计算结果：123
+                                            <form>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="control-label">Recipient:</label>
+                                                    <input type="text" class="form-control" id="recipient-name">
                                                 </div>
-                                                <div class="chart-area" style="height:500px;overflow:auto; ">
-                                                    <canvas id="myChart"></canvas>
+                                                <div class="form-group">
+                                                    <label for="message-text" class="control-label">Message:</label>
+                                                    <textarea class="form-control" id="message-text"></textarea>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer" id="first-footer">
-                                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#next" data-dismiss="modal">下一步
-                                                </button>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="modal fade" tabindex="-1" role="dialog" id="next">
-                                    <div class="modal-dialog" style="max-width: 1300px;">
-                                        <div class="modal-content">
-                                            <div class="modal-header" id="modal-title">
-
-                                            </div>
-                                            <div class="modal-body col-md-20">
-                                                <div class="row">
-                                                    <div class="table-responsive col-md-8">
-                                                        <table class="table table-bordered" id="point-set" width="100%"
-                                                               cellspacing="0">
-                                                            <thead>
-                                                            <tr>
-                                                                <th>WIND医疗保健</th>
-                                                                <th>WIND公用事业</th>
-                                                                <th>WIND能源</th>
-                                                                <th>WIND材料</th>
-                                                                <th>观点收益（超额）</th>
-                                                                <th>观点收益下限</th>
-                                                                <th>观点收益上限</th>
-                                                                <th>信心水平</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="table-responsive col-md-4">
-                                                        <table class="table table-bordered" id="prospective"
-                                                               width="100%"
-                                                               cellspacing="0">
-                                                            <thead>
-                                                            <tr>
-                                                                <th>行业名称</th>
-                                                                <th>分析结果</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer" id="first-footer">
-                                                <button type="button" class="btn btn-light">插入观点数量
-                                                </button>
-                                                <input type="number" step="1" id="point-num" value="1"
-                                                       class="form-control"
-                                                       style="width: 80px;margin-right: 2%;">
-                                                <button type="button" class="btn btn-light">删除所选
-                                                </button>
-                                                <button type="button" class="btn btn-light">清空观点
-                                                </button>
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                                                        data-toggle="modal"
-                                                        data-target="#first">
-                                                    上一步
-                                                </button>
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">完成
-                                                </button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
                             </div>
 
 
                         </div>
+
+                        <div class="row align-items-center col-md-10">
+                            <h7>起始资金：</h7>
+                            <input type="number" class="form-control" id="g_baseCapital" value="1000000"
+                                   style="width: 8%;margin-right: 20px;">
+                            <h7>调仓频率：</h7>
+                            <input type="number" class="form-control" id="g_rebalance_days" value="20"
+                                   style="width: 8%;margin-right: 20px;">
+                            <h7>佣金手续费：</h7>
+                            <input type="number" class="form-control" id="g_commission" value="0.0003"
+                                   style="width: 8%;margin-right: 20px;">
+                            <h7>交易滑点：</h7>
+                            <input type="number" class="form-control" id="g_slippage" value="0.00246"
+                                   style="width: 8%;margin-right: 20px;">
+                            <h7 style="margin-top: 0.5%;">无风险利率：</h7>
+                            <input id="g_rf" type="number" step="0.01" value="0.015" min="0" max="1"
+                                   class="form-control" style="width: 8%;margin-right: 20px;">
+                        </div>
+                        {##}
+                        {#                        <div class="row align-items-center col-md-10" id="model-parameters">#}
+                        {#                            <div id="mean-mse-model" class="row col-md-10" style="margin-top: 1%;">#}
+                        {#                                <h7 style="margin-top: 0.5%;">风险厌恶系数：</h7>#}
+                        {#                                <input id="risk-hate" type="number" step="1" min="1" max="8" value="1"#}
+                        {#                                       class="form-control"#}
+                        {#                                       style="width: 8%;margin-right: 20px;">#}
+                        {##}
+                        {#                                <h7 style="margin-top: 0.5%;">无风险利率：</h7>#}
+                        {#                                <input id="no-risk-rate" type="number" step="0.01" value="0.03" min="0" max="1"#}
+                        {#                                       class="form-control"#}
+                        {#                                       style="width: 8%;margin-right: 20px;">#}
+                        {#                            </div>#}
+                        {##}
+                        {##}
+                        {#                        </div>#}
+
+                        <div id="bl-model" class="row col-md-10" style="margin-top: 1%;">
+
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#first" style="margin-right: 1%;">BL模型调整
+                            </button>
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="first"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 750px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
+
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="row col-md-12 align-items-center offset-md-1">
+                                                <h6 style="margin-top: 0.5%;">市场期望收益：</h6>
+                                                <input id="market-expect-profit" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       class="form-control"
+                                                       style="width: 70px;margin-right: 20px;">
+
+                                                <h6 style="margin-top: 0.5%;">市场收益方差：</h6>
+                                                <input id="market-profit-var" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       max="1"
+                                                       class="form-control"
+                                                       style="width: 70px;margin-right: 20px;">
+                                                <h6 style="margin-top: 0.5%;">无风险利率：</h6>
+                                                <input id="no-risk-profit-rate" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       max="1"
+                                                       class="form-control"
+                                                       style="width: 70px;margin-right: 20px;">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" id="first-footer">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#next" data-dismiss="modal">下一步
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="next"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 750px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
+
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="row form-group offset-md-1">
+                                                <div class="col-md-5">
+                                                    <h6>待选行业</h6>
+                                                    <select id="unselected-trades" name="trades" multiple
+                                                            class="form-control"
+                                                            style="height: 160px;"></select>
+                                                </div>
+                                                <div class="center-block control-buttons"
+                                                     style="margin-top: 4%; margin-left: 1%;">
+                                                    <div class="row">
+                                                        <button type="button" id="trade-selectAll"
+                                                                class="btn btn-default btn-success btn-selectbox"><i
+                                                                class="fas fa-check"></i></button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button type="button" id="trade-selectOne"
+                                                                class="btn btn-default btn-primary btn-selectbox"><i
+                                                                class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button type="button" id="trade-removeOne"
+                                                                class="btn btn-default btn-primary btn-selectbox"><i
+                                                                class="fas fa-arrow-left"></i></button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button type="button" id="trade-removeAll"
+                                                                class="btn btn-default btn-danger btn-selectbox"><i
+                                                                class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5" style="margin-left: 1.2%;">
+                                                    <h6>已选行业</h6>
+                                                    <select id="selected-trades" name="stocks" multiple
+                                                            class="form-control"
+                                                            style="height: 160px;"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer" id="first-footer">
+                                            <button type="button" class="btn btn-light" data-toggle="modal"
+                                                    data-target="#first" data-dismiss="modal">上一步
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    id="build-trade-table"
+                                                    data-target="#last" data-dismiss="modal">下一步
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="last"
+                             aria-labelledby="mySmallModalLabel">
+                            <div class="modal-dialog modal-lg" role="document" style="max-width: 750px;">
+                                <div class="modal-content">
+                                    <div class="modal-header" id="modal-title">
+
+                                    </div>
+
+
+                                    <div class="modal-body">
+                                        <div class="table-responsive ">
+                                            <table class="table table-bordered " id="trade-table" width="80%"
+                                                   cellspacing="0" style="margin: 0 auto;">
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="modal-footer" id="first-footer">
+                                        <button type="button" class="btn btn-light" data-toggle="modal"
+                                                data-target="#next" data-dismiss="modal">上一步
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-dismiss="modal">完成
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -358,7 +402,7 @@
                 <div class="card border-left-primary form-group">
                     <div class="card-body shadow">
                         <div id="stocks" class="row align-items-center">
-                            <div class="col-md-2 col-xs-2">
+                            <div class="col-md-2">
                                 <h6 class="align-items-center">股票池</h6>
                                 <select id="unselected-stockPool" name="stocks" multiple class="form-control"
                                         style="height: 160px; margin-right: 20px;"></select>
@@ -399,110 +443,135 @@
                     </div>
                 </div>
 
+
                 <div class="card border-left-primary form-group">
                     <div class="card-body shadow">
-                        <div class="row align-items-center col-md-4">
-                            <h6>股票约束：</h6>
-                            <div class="dropdown mb-3" style="margin-top: 0.5%;">
-                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                        id="restrict-types"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-                                        style="width: 120px;">
-                                    个性化约束
-                                </button>
-                                <ul class="dropdown-menu animated--fade-in" aria-labelledby="restrict-types"
-                                    id="restrict">
-                                    <li><a class="dropdown-item">个性化约束</a></li>
-                                    <li><a class="dropdown-item">统一约束</a></li>
-                                </ul>
+
+                        <div id="restrict-stocks" class="row col-md-16 form-group">
+                            <div class="col-md-2">
+                                <h6>待配置股票集</h6>
+                                <select id="unselected-restrict-stocks" name="stocks" multiple
+                                        class="form-control"
+                                        style="height: 160px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 2%;">
+                                <div>
+                                    <button type="button" id="restrict-stock-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-stock-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-stock-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-stock-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 0.4%;">
+                                <h6>待约束股票集</h6>
+                                <select id="selected-restrict-stocks" name="stocks" multiple
+                                        class="form-control"
+                                        style="height: 160px;"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <h6>待选约束行业</h6>
+                                <select id="unselected-restrict-trades" name="trades" multiple
+                                        class="form-control"
+                                        style="height: 160px;"></select>
+                            </div>
+                            <div class="center-block control-buttons"
+                                 style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选约束行业</h6>
+                                <select id="selected-restrict-trades" name="stocks" multiple
+                                        class="form-control"
+                                        style="height: 160px;"></select>
                             </div>
                         </div>
 
-                        <div id="single-restrict" class="row col-md-8">
-                            <h7 style="margin-top: 0.5%;">最小权重：</h7>
-                            <input type="number" step="0.01" id="single-mini-weight" value="0" class="form-control"
-                                   style="width: 100px;margin-right: 20px;">
-                            <h7 style="margin-top: 0.5%;">最大权重：</h7>
-                            <input type="number" step="0.01" id="single-maxi-weight" value="0.4" class="form-control"
-                                   style="width: 100px;margin-right: 20px;">
+
+                        <div class="row col-md-10 form-group">
+                            <h7 style="margin-top: 0.5%;">取值范围：</h7>
+                            <input type="number" step="0.01" id="restrict-mini-weight" value="0"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
+                            <input type="number" step="0.01" id="restrict-maxi-weight" value="0.4"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <btn type="button" id="add-restrict-stock" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加股票约束
+                            </btn>
+                            <btn type="button" id="add-restrict-trade" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加行业约束
+                            </btn>
                         </div>
 
-                        <div id="restrict-stocks" class="row">
-                            <div class="row col-md-10 form-group">
-                                <div class="col-md-2">
-                                    <h6>待配置股票集</h6>
-                                    <select id="unselected-restrict-stocks" name="stocks" multiple
-                                            class="form-control"
-                                            style="height: 160px;"></select>
-                                </div>
-                                <div class="center-block control-buttons" style="margin-top: 2%;">
-                                    <div>
-                                        <button type="button" id="restrict-stock-selectAll"
-                                                class="btn btn-default btn-success btn-selectbox"><i
-                                                class="fas fa-check"></i></button>
-                                    </div>
-                                    <div>
-                                        <button type="button" id="restrict-stock-selectOne"
-                                                class="btn btn-default btn-primary btn-selectbox"><i
-                                                class="fas fa-arrow-right"></i></button>
-                                    </div>
-                                    <div>
-                                        <button type="button" id="restrict-stock-removeOne"
-                                                class="btn btn-default btn-primary btn-selectbox"><i
-                                                class="fas fa-arrow-left"></i></button>
-                                    </div>
-                                    <div>
-                                        <button type="button" id="restrict-stock-removeAll"
-                                                class="btn btn-default btn-danger btn-selectbox"><i
-                                                class="fas fa-trash"></i></button>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6>待约束股票集</h6>
-                                    <select id="selected-restrict-stocks" name="stocks" multiple
-                                            class="form-control"
-                                            style="height: 160px;"></select>
-                                </div>
-                            </div>
-                            <div class="row col-md-10 form-group">
-                                <h7 style="margin-top: 0.5%;">取值范围：</h7>
-                                <input type="number" step="0.01" id="restrict-mini-weight" value="0"
-                                       class="form-control"
-                                       style="width: 100px;margin-right: 1%;">
-                                <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
-                                <input type="number" step="0.01" id="restrict-maxi-weight" value="0.4"
-                                       class="form-control"
-                                       style="width: 100px;margin-right: 1%;">
-                                <btn type="button" id="add-restrict" class="btn btn-default btn-success"
-                                     style="margin-right: 2%;">
-                                    添加约束
-                                </btn>
-                            </div>
+                        <div class="col-md-6 table-responsive form-group">
+                            <table class="table table-bordered" id="restrict-table" width="100%"
+                                   cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>约束类型</th>
+                                    <th>约束条件</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                            <div class="col-md-5 table-responsive">
-                                <table class="table table-bordered" id="restrict-table" width="100%" cellspacing="0">
-                                    <thead>
-                                    <tr>
-                                        <th>约束类型</th>
-                                        <th>约束条件</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
+
                 <!-- submit -->
-                <div class="form-group">
-                    <btn type="button" id="submit-btn" class="btn btn-default btn-success col-md-1">
-                        submit
-                    </btn>
+                <div class="card form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" id="submit-btn">submit
+                    </button>
+                    <img src="{% static "img/loading.gif" %}" id="loading" style="display:none">
+                </div>
+
+                <div class="card border-left-primary form-group" id="perform-table" style="display: none">
+                    <div class="card-body">
+                        <div class="col-md-6 table-responsive form-group">
+                            <table id="absolutePerform" class="table table-light" width="100%" cellspacing="0">
+
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card border-left-primary form-group" style="height: 1000px;">
@@ -516,19 +585,21 @@
                     </div>
 
                 </div>
-
             </div>
-            <!-- /.container-fluid -->
 
 
         </div>
-        <!-- End of Main Content -->
+        <!-- /.container-fluid -->
 
-
-        <!-- End of Footer -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+
+
+    <!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
@@ -559,14 +630,16 @@
 <script src="{% static "vendor/datatables/jquery.dataTables.min.js" %}"></script>
 <script src="{% static "vendor/chart.js/Chart.min.js" %}"></script>
 <script src="{% static "vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
-
+<script src="{% static "js/dataTables.cellEdit.js" %}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         var stockPool = getStockPool();
-        var restrictPool = getRestrictPool();
+        var tradePool = getTradesPool();
+        var first = true;
+        var restrictPool = [];
         console.log(stockPool);
-        initializeStockPool(stockPool);
-        initializeRestrictPool(restrictPool);
+        initializePool(stockPool, '#unselected-stockPool');
+        initializePool(tradePool, '#unselected-tradePool');
         var modelType = "均值方差模型";
         var restrictType = "个性化约束";
 
@@ -574,11 +647,25 @@
             unselectedStockPoolOnChange(this, stockPool);
         };
 
-        $('#restrict-table').DataTable();
+        $('#calculate-modal').on('show.bs.modal', function (event) {
+            var modal = $(this);
+            var date = new Date();
+            console.log("123");
+            $('#modal-title').text('Now ' + date.getHours() + ": " + date.getMinutes() + ": " + date.getSeconds());
+        });
+
+
         var restrictTable = $('#restrict-table').DataTable();
+        {#var tradeTable = $("#trade-table").DataTable();#}
+
 
         $('#restrict-table').on('dblclick', 'tbody tr', function () {
             restrictTable.row(this).remove().draw(true);
+        });
+
+        $("#build-trade-table").on('click', function () {
+            buildTradeTable(first);
+            first = false;
         });
 
         $("#stock-selectOne").on('click', function () {
@@ -598,6 +685,44 @@
         });
         $('#selected-stocks').dblclick(function () {
             removeOneStock();
+        });
+
+        $("#restrict-trade-selectOne").on('click', function () {
+            selectOneRestrictTrade();
+        });
+        $("#restrict-trade-removeOne").on('click', function () {
+            removeOneRestrictTrade();
+        });
+        $("#restrict-trade-selectAll").on('click', function () {
+            selectAllRestrictTrades();
+        });
+        $("#restrict-trade-removeAll").on('click', function () {
+            removeAllRestrictTrades();
+        });
+        $('#unselected-restrict-trades').dblclick(function () {
+            selectOneRestrictTrade();
+        });
+        $('#selected-restrict-trades').dblclick(function () {
+            removeOneRestrictTrade();
+        });
+
+        $("#trade-selectOne").on('click', function () {
+            selectOneTrade();
+        });
+        $("#trade-removeOne").on('click', function () {
+            removeOneTrade();
+        });
+        $("#trade-selectAll").on('click', function () {
+            selectAllTrades();
+        });
+        $("#trade-removeAll").on('click', function () {
+            removeAllTrades();
+        });
+        $('#unselected-trades').dblclick(function () {
+            selectOneTrade();
+        });
+        $('#selected-trades').dblclick(function () {
+            removeOneTrade();
         });
 
         $('#restrict-stock-selectOne').on('click', function () {
@@ -623,20 +748,33 @@
         $(function () {
             $("#models").on('click', 'li a', function () {
                 $("#model-types").text($(this).text());
-
                 if ($("#model-types").text() === "均值方差模型" && modelType !== "均值方差模型") {
-                    {#$("#restrict-stocks").hide();#}
+                    if (modelType === "B-L模型")
+                        $("#bl-model").toggle("slow");
                     $("#mean-mse-model").toggle("slow");
                     modelType = "均值方差模型";
-                    console.log(modelType);
                 }
                 if ($("#model-types").text() === "B-L模型" && modelType !== "B-L模型") {
-                    $("#mean-mse-model").toggle("slow");
+                    if (modelType === "均值方差模型")
+                        $("#mean-mse-model").toggle("slow");
                     $("#bl-model").toggle("slow");
                     modelType = $(this).text();
-                    console.log(modelType)
                 }
+                if ($("#model-types").text() === "等权重模型" && modelType !== "等权重模型") {
+                    if (modelType === "均值方差模型")
+                        $("#mean-mse-model").toggle("slow");
+                    if (modelType === "B-L模型")
+                        $("#bl-model").toggle("slow");
+                    modelType = $(this).text();
+                }
+                console.log($("#model-types").text());
             });
+
+            $("#g-benmark").on('click', 'li a', function () {
+                $("#g-benmarks").text($(this).text());
+                console.log($("#g-benmarks").text());
+            });
+
             $("#restrict").on('click', 'li a', function () {
                 $("#restrict-types").text($(this).text());
                 if ($("#restrict-types").text() === "统一约束" && restrictType !== "统一约束") {
@@ -655,7 +793,7 @@
                 $("#expected-benefit").text($(this).text());
             });
 
-            $('#add-restrict').on('click', function () {
+            $('#add-restrict-stock').on('click', function () {
                 var restricts = getAllOptions("selected-restrict-stocks");
                 var miniWeight = document.getElementById("restrict-mini-weight").value;
                 var maxiWeight = document.getElementById("restrict-maxi-weight").value;
@@ -663,9 +801,19 @@
                     restrictTable.row.add(["股票比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
                 }
             });
+
+            $('#add-restrict-trade').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-trades");
+                var miniWeight = document.getElementById("restrict-mini-weight").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight").value;
+                for (var key in restricts) {
+                    restrictTable.row.add(["行业比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
         });
 
         $("#single-restrict").hide();
+        $("#bl-model").hide();
         {#$("#mean-mse-model").hide();#}
 
         $('.datepicker').datepicker({
@@ -675,24 +823,47 @@
             format: 'yyyy/mm/dd',
         });
 
+        submitFirst = true;
         $('#submit-btn').click(function (e) {
-            e.preventDefault();
-            console.log("123");
+            {#e.preventDefault();#}
             // your statements;
-            var selectedStocks = getAllOptions("selected-stocks");
-            var selectedRestrictStocks = getAllOptions("selected-restrict-stocks");
-            var modelType = $("#model-types").text();
-            var date = document.getElementById("date").value;
-            var dateBack = document.getElementById("date-back").value;
-            var miniWeight = document.getElementById("mini-weight").value;
-            var maxiWeight = document.getElementById("maxi-weight").value;
-            console.log(selectedStocks);
-            console.log(selectedRestrictStocks);
-            console.log(modelType);
-            console.log(date);
-            console.log(dateBack);
-            console.log(miniWeight);
-            console.log(maxiWeight);
+            var options = getAllOptions("selected-stocks");
+            var g_code_list = [];
+            for (var item in options) {
+                g_code_list.push(item);
+            }
+
+            $('#loading').show();
+            var post_data = {
+                g_baseCapital: $("#g_baseCapital").val(),
+                g_rebalance_days: $("#g_rebalance_days").val(),
+                g_startTime: $("#g_startTime").val(),
+                g_endTime: $("#g_endTime").val(),
+                g_code_list: g_code_list,
+                g_lookback: $("#g_lookback").val(),
+                g_commission: $("#g_commission").val(),
+                g_slippage: $("#g_slippage").val(),
+                g_benchmark: $("#g-benmarks").text(),
+                g_code_list: g_code_list,
+                g_rf: $("#g_rf").val(),
+            };
+            $.ajax({
+                type: "POST",
+                url: 'strategy_submit',
+                traditional: true,
+                data: post_data,
+                success: function (data) {
+                    console.log(data);
+                    $('#perform-table').show();
+                    buildAbsolutePerformTable(submitFirst, data['dataset'], data['columns']);
+                    submitFirst = false;
+                    $('#loading').hide();
+                },
+                error: function (xhr, status) {
+                    $('#loading').hide();
+                }
+            });
+
 
         });
 
@@ -734,7 +905,9 @@
             }
         });
 
-    });
+
+    })
+    ;
 </script>
 
 </body>
