@@ -213,6 +213,7 @@ def strategy_submit(request):
             'g_benchmark': names_to_id[g_benchmark],
             'g_rf': g_rf
         }
+        print(names_to_id[g_benchmark])
         with open(r'C:\Users\never\Desktop\website-practice\json\backtest.json', 'w') as f:
             f.write(json.dumps(data))
 

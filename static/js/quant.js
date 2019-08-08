@@ -347,11 +347,8 @@ function buildTradeTable(first) {
 }
 
 
-function buildGeguTable(first, dataset, columns) {
-    if (!first) {
-        $('#gegu').DataTable().clear().destroy();
-        $('#gegu').empty();
-    }
+function buildGeguTable(dataset, columns) {
+
     tablecolumns = [];
     for (var key in columns) {
         tablecolumns.push({title: columns[key], orderable: false,});
@@ -372,17 +369,12 @@ function buildGeguTable(first, dataset, columns) {
     $("div.toolbar").html('<b>个股表格</b>');
 }
 
-function buildAbsolutePerformTable(first, dataset, columns) {
-    if (!first) {
-        $('#absolutePerform').DataTable().clear().destroy();
-        $('#absolutePerform').empty();
-    }
+function buildPerformTable(id, dataset, columns, title) {
     tablecolumns = [];
     for (var key in columns) {
         tablecolumns.push({title: columns[key], orderable: false,});
     }
-    $('#absolutePerform').DataTable({
-        "sDom": '<"toolbar">frtip',
+    $(id).DataTable({
         data: dataset,
         columns: tablecolumns,
         searching: false,
@@ -394,5 +386,171 @@ function buildAbsolutePerformTable(first, dataset, columns) {
         bAutoWidth: false,
         aaSorting: []
     });
-    $("div.toolbar").html('<b>策略绝对表现</b>');
+}
+
+function buildBarGraph(id, barNames, barValues) {
+    var ctx = document.getElementById(id).getContext('2d');
+
+    const defaultColors = [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+    ];
+    var colors = [];
+    for (var i = 0; i < barValues.length; i++) {
+        colors.push(defaultColors[i % 6]);
+    }
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: barNames,
+            datasets: [{
+                label: '市值权重',
+                data: barValues,
+                backgroundColor: colors,
+                borderColor: colors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+    return myChart;
+}
+
+function buildAbsoluteChart(timestamps, absolute_values, benchmark_values, benchmark) {
+    var ctx = document.getElementById('absoluteLine').getContext('2d');
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: timestamps,
+            datasets: [{
+                label: 'my_portfolio',
+                backgroundColor: 'rgba(255,99,132,1)',
+                borderColor: 'rgba(255,99,132,1)',
+                data: absolute_values,
+                fill: false,
+            }, {
+                label: benchmark,
+                fill: false,
+                backgroundColor: 'rgba(54, 162, 235, 1)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                data: benchmark_values,
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: '绝对表现'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '日期'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Value'
+                    }
+                }]
+            }
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            elements: {
+                    point:{
+                        radius: 0
+                    }
+                }
+        }
+    };
+
+    var absoluteLine = new Chart(ctx, config);
+
+    return absoluteLine;
+}
+
+
+function buildRelativeChart(timestamps, relative_values) {
+    var ctx = document.getElementById('relativeLine').getContext('2d');
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: timestamps,
+            datasets: [{
+                label: 'my_portfolio',
+                backgroundColor: 'rgba(255,99,132,1)',
+                borderColor: 'rgba(255,99,132,1)',
+                data: relative_values,
+                fill: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: '相对表现'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '日期'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Value'
+                    }
+                }]
+            }
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            elements: {
+                    point:{
+                        radius: 0
+                    }
+                }
+        }
+    };
+
+    var relativeLine = new Chart(ctx, config);
+
+    return relativeLine;
 }
