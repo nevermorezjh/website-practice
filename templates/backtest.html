@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Quant</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static "vendor/fontawesome-free/css/all.min.css" %}" rel="stylesheet" type="text/css">
+
+
+    <!-- Custom styles for this template-->
+    <link href="{% static "css/sb-admin-2.css" %}" rel="stylesheet">
+
+    <link href="{% static "css/bootstrap-datepicker.css" %}" rel="stylesheet">
+    <link href="{% static "css/waitMe.min.css" %}" rel="stylesheet">
+    <link href="{% static "vendor/datatables/dataTables.bootstrap4.min.css" %}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">QUANT</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Interface
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">
+                <i class="fas fa-fw fa-table"></i>
+                <span>首页</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'allocation' %}">
+                <i class="fas fa-fw fa-table"></i>
+                <span>组合配置</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'backtest' %}">
+                <i class="fas fa-fw fa-table"></i>
+                <span>策略回测</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        {% if user.is_authenticated %}
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.username }}</span>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i href="logout" class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                <a class="nav-link dropdown-toggle" href="{% url 'login' %}" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">登录</span>
+                                </a>
+                                <a class="nav-link dropdown-toggle" href="{% url 'register' %}" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">注册</span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </li>
+                </ul>
+
+
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- model parameters -->
+                <!-- Content Row -->
+                <div class="card border-left-primary form-group">
+                    <div class="card-body shadow">
+                        <div class="row align-items-center col-md-10">
+                            <h7>模型类型：</h7>
+                            <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="model-types"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                                        style="width: 120px;">
+                                    {% if models %}
+                                        {{ models.0 }}
+                                    {% endif %}
+                                </button>
+                                <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types" id="models">
+                                    {% for item in models %}
+                                        <li><a class="dropdown-item">{{ item }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <h7>起始日期：</h7>
+                            <input data-provide="datepicker" id="g_startTime" value="{{ begin_date }}"
+                                   class="form-control"
+                                   style="width: 120px;margin-right: 20px;">
+                            <h7>结束日期：</h7>
+                            <input data-provide="datepicker" id="g_endTime" value="{{ end_date }}" class="form-control"
+                                   style="width: 120px;margin-right: 20px;">
+                            <h7>回溯时长：</h7>
+                            <input type="number" class="form-control" id="g_lookback" value="30"
+                                   style="width: 8%;margin-right: 20px;">
+                            <!-- Small modal -->
+
+                            <h7>基准指数：</h7>
+                            <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="g-benmarks"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                                        style="width: 120px;">
+                                    {% if g_benchmarks %}
+                                        {{ g_benchmarks.0 }}
+                                    {% endif %}
+                                </button>
+                                <ul class="dropdown-menu animated--fade-in" aria-labelledby="model-types"
+                                    id="g-benmark">
+                                    {% for item in g_benchmarks %}
+                                        <li><a class="dropdown-item">{{ item }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row align-items-center col-md-10">
+                            <h7>起始资金：</h7>
+                            <input type="number" class="form-control" id="g_baseCapital" value="1000000"
+                                   style="width: 110px;margin-right: 20px;">
+                            <h7>调仓频率：</h7>
+                            <input type="number" class="form-control" id="g_rebalance_days" value="20"
+                                   style="width: 8%;margin-right: 20px;">
+                            <h7>佣金手续费：</h7>
+                            <input type="number" class="form-control" id="g_commission" value="0.0003"
+                                   style="width: 8%;margin-right: 20px;">
+                            <h7>交易滑点：</h7>
+                            <input type="number" class="form-control" id="g_slippage" value="0.00246"
+                                   style="width: 100px;margin-right: 20px;">
+                            <h7 style="margin-top: 0.5%;">无风险利率：</h7>
+                            <input id="g_rf" type="number" step="0.01" value="0.015" min="0" max="1"
+                                   class="form-control" style="width: 8%;margin-right: 20px;">
+                        </div>
+
+                        <div id="bl-model" class="row col-md-10" style="margin-top: 1%;display: none;">
+
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#first" style="margin-right: 1%;">BL模型调整
+                            </button>
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="first"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 850px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
+
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="row align-items-center">
+                                                <h6 style="margin-top: 0.5%;margin-left: 20px;">市场期望收益：</h6>
+                                                <input id="market-expect-profit" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       class="form-control"
+                                                       style="width: 70px;margin-right: 20px;">
+
+                                                <h6 style="margin-top: 0.5%;">市场收益方差：</h6>
+                                                <input id="market-profit-var" type="number" step="0.01" value="0.03"
+                                                       min="0"
+                                                       max="1"
+                                                       class="form-control"
+                                                       style="width: 70px;margin-right: 20px;">
+                                                <h6 style="margin-top: 0.5%;">无风险利率：</h6>
+                                                <input id="no-risk-profit-rate" type="number" step="0.01"
+                                                        value="0.03"
+                                                       min="0"
+                                                       max="1"
+                                                       class="form-control"
+                                                       style="width: 70px;margin-right: 20px;">
+                                                <h6 style="margin-top: 0.5%;">观点权重：</h6>
+                                                <input id="tau" type="number" step="0.01" value="0.5"
+                                                       min="0"
+                                                       max="1"
+                                                       class="form-control"
+                                                       style="width: 70px;margin-right: 20px;">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" id="first-footer">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    id="build-trade-table"
+                                                    data-target="#last" data-dismiss="modal">下一步
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="last"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 750px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-title">
+
+                                        </div>
+
+
+                                        <div class="modal-body">
+                                            <div class="table-responsive ">
+                                                <table class="table table-bordered " id="trade-table" width="80%"
+                                                       cellspacing="0" style="margin: 0 auto;">
+
+
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer" id="first-footer">
+                                            <button type="button" class="btn btn-light" id="add-row">
+                                                添加一行
+                                            </button>
+                                            <button type="button" class="btn btn-light" data-toggle="modal"
+                                                    data-target="#first" data-dismiss="modal">上一步
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-dismiss="modal">完成
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-left-primary form-group">
+                    <div class="card-body shadow">
+
+                        <div class="row align-items-center col-md-10">
+                            <h7>标的类型：</h7>
+                            <div class="dropdown mb-3" style="margin-top: 1%;margin-right: 1%;">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                        id="selected-type"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                                        style="width: 120px;">
+                                    股票
+                                </button>
+                                <ul class="dropdown-menu animated--fade-in" id="types">
+                                    <li><a class="dropdown-item">股票</a></li>
+                                    <li><a class="dropdown-item">大盘指数</a></li>
+                                    <li><a class="dropdown-item">行业指数</a></li>
+                                    <li><a class="dropdown-item">场内基金</a></li>
+                                    <li><a class="dropdown-item">场外公募基金</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    id="get-subject-message"
+                                    data-target=".subject-message">显示已选标的基本信息
+                            </button>
+                            <div class="modal fade subject-message" tabindex="-1" role="dialog" id="subject-message"
+                                 aria-labelledby="mySmallModalLabel">
+                                <div class="modal-dialog modal-lg" role="document" style="max-width: 1800px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            标的基本信息
+                                        </div>
+                                        <div class="modal-body">
+                                            <table id="subject" class="table table-light" width="100%"
+                                                   cellspacing="0">
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="last"
+                             aria-labelledby="mySmallModalLabel">
+                            <div class="modal-dialog modal-lg" role="document" style="max-width: 750px;">
+                                <div class="modal-content">
+                                    <div class="modal-header" id="modal-title">
+
+                                    </div>
+
+
+                                    <div class="modal-body">
+                                        <div class="table-responsive ">
+                                            <table class="table table-bordered " id="trade-table" width="80%"
+                                                   cellspacing="0" style="margin: 0 auto;">
+
+
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="modal-footer" id="first-footer">
+                                        <button type="button" class="btn btn-light" data-toggle="modal"
+                                                data-target="#next" data-dismiss="modal">上一步
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-dismiss="modal">完成
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- stock pool -->
+                <div id="stock_pool" class="card border-left-primary form-group">
+                    <div class="card-body shadow">
+                        <div class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6 class="align-items-center">股票池</h6>
+                                <select id="unselected-stockPool" name="stock" multiple class="form-control"
+                                        style="height: 250px; margin-right: 20px;"></select>
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                                <h7>待选股票</h7>
+                                <select id="unselected-stock" name="stock" multiple class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="stock-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="stock-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="stock-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="stock-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选股票</h6>
+                                <select id="selected-stock" name="stock" multiple class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+
+                        </div>
+
+
+                        <div id="restrict-stock" class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6>待配置股票集</h6>
+                                <select id="unselected-restrict-stock" name="stock" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 2%;">
+                                <div>
+                                    <button type="button" id="restrict-stock-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-stock-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-stock-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-stock-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 0.4%;">
+                                <h6>待约束股票集</h6>
+                                <select id="selected-restrict-stock" name="stock" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <h6>待选约束行业</h6>
+                                <select id="unselected-restrict-trade" name="trade" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons"
+                                 style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-trade-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选约束行业</h6>
+                                <select id="selected-restrict-trade" name="stock" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div class="row col-md-10 form-group">
+                            <h7 style="margin-top: 0.5%;">取值范围：</h7>
+                            <input type="number" step="0.01" id="restrict-mini-weight-stock" value="0"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
+                            <input type="number" step="0.01" id="restrict-maxi-weight-stock" value="0.4"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <btn type="button" id="add-restrict-stock" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加股票约束
+                            </btn>
+                            <btn type="button" id="add-restrict-trade" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加行业约束
+                            </btn>
+                        </div>
+
+                        <div class="col-md-6 table-responsive form-group">
+                            <table class="table table-bordered" id="restrict-table-stock" width="100%"
+                                   cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>约束类型</th>
+                                    <th>约束条件</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- dapan pool -->
+                <div id="dapan_pool" class="card border-left-primary form-group" style="display: none">
+                    <div class="card-body shadow">
+                        <div class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6 class="align-items-center">大盘指数</h6>
+                                <select id="unselected-dapan" name="dapan" multiple class="form-control"
+                                        style="height: 250px; margin-right: 20px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="dapan-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="dapan-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="dapan-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="dapan-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选大盘指数</h6>
+                                <select id="selected-dapan" name="dapan" multiple class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div id="restrict-dapan" class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6>待配置大盘集</h6>
+                                <select id="unselected-restrict-dapan" name="dapan" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 2%;">
+                                <div>
+                                    <button type="button" id="restrict-dapan-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-dapan-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-dapan-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-dapan-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 0.4%;">
+                                <h6>待约束大盘集</h6>
+                                <select id="selected-restrict-dapan" name="dapan" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div class="row col-md-10 form-group">
+                            <h7 style="margin-top: 0.5%;">取值范围：</h7>
+                            <input type="number" step="0.01" id="restrict-mini-weight-dapan" value="0"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
+                            <input type="number" step="0.01" id="restrict-maxi-weight-dapan" value="0.4"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <btn type="button" id="add-restrict-dapan" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加大盘约束
+                            </btn>
+                        </div>
+
+                        <div class="col-md-6 table-responsive form-group">
+                            <table class="table table-bordered" id="restrict-table-dapan" width="100%"
+                                   cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>约束类型</th>
+                                    <th>约束条件</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 行业 pool -->
+                <div id="hangye_pool" class="card border-left-primary form-group" style="display: none">
+                    <div class="card-body shadow">
+                        <div class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6 class="align-items-center">行业指数</h6>
+                                <select id="unselected-hangye" name="hangye" multiple class="form-control"
+                                        style="height: 250px; margin-right: 20px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="hangye-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="hangye-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="hangye-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="hangye-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选行业指数</h6>
+                                <select id="selected-hangye" name="hangye" multiple class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div id="restrict-hangyen" class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6>待配置行业集</h6>
+                                <select id="unselected-restrict-hangye" name="hangye" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 2%;">
+                                <div>
+                                    <button type="button" id="restrict-hangye-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-hangye-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-hangye-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-hangye-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 0.4%;">
+                                <h6>待约束行业集</h6>
+                                <select id="selected-restrict-hangye" name="hangye" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div class="row col-md-10 form-group">
+                            <h7 style="margin-top: 0.5%;">取值范围：</h7>
+                            <input type="number" step="0.01" id="restrict-mini-weight-hangye" value="0"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
+                            <input type="number" step="0.01" id="restrict-maxi-weight-hangye" value="0.4"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <btn type="button" id="add-restrict-hangye" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加行业约束
+                            </btn>
+                        </div>
+
+                        <div class="col-md-6 table-responsive form-group">
+                            <table class="table table-bordered" id="restrict-table-hangye" width="100%"
+                                   cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>约束类型</th>
+                                    <th>约束条件</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- exchanged fund pool -->
+                <div id="exchanged_fund_pool" class="card border-left-primary form-group" style="display: none">
+                    <div class="card-body shadow">
+                        <div class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6 class="align-items-center">场内基金池</h6>
+                                <select id="unselected-exchanged_fundPool" name="stock" multiple
+                                        class="form-control"
+                                        style="height: 250px; margin-right: 20px;"></select>
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                                <h7>待选基金</h7>
+                                <select id="unselected-exchanged_fund" name="exchanged_funds" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="exchanged_fund-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="exchanged_fund-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="exchanged_fund-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="exchanged_fund-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选基金</h6>
+                                <select id="selected-exchanged_fund" name="exchanged_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div id="restrict-exchanged_fund" class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6>待配置基金集</h6>
+                                <select id="unselected-restrict-exchanged_fund" name="exchanged_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-top: 2%;">
+                                <div>
+                                    <button type="button" id="restrict-exchanged_fund-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-exchanged_fund-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-exchanged_fund-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-exchanged_fund-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 0.4%;">
+                                <h6>待约束基金集</h6>
+                                <select id="selected-restrict-exchanged_fund" name="exchanged_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <h6>待选约束类型</h6>
+                                <select id="unselected-restrict-exchanged_fund_types" name="exchanged_fund_types"
+                                        multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons"
+                                 style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="restrict-exchanged_fund_types-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-exchanged_fund_tpyes-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-exchanged_fund_types-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-exchanged_fund_types-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选约束类型</h6>
+                                <select id="selected-restrict-exchanged_fund_types" name="exchanged_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div class="row col-md-10 form-group">
+                            <h7 style="margin-top: 0.5%;">取值范围：</h7>
+                            <input type="number" step="0.01" id="restrict-mini-weight-exchanged_fund" value="0"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
+                            <input type="number" step="0.01" id="restrict-maxi-weight-exchanged_fund" value="0.4"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <btn type="button" id="add-restrict-exchanged_fund" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加基金约束
+                            </btn>
+                            <btn type="button" id="add-restrict-exchanged_fund_types"
+                                 class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加类型约束
+                            </btn>
+                        </div>
+
+                        <div class="col-md-6 table-responsive form-group">
+                            <table class="table table-bordered" id="restrict-table-exchanged_fund" width="100%"
+                                   cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>约束类型</th>
+                                    <th>约束条件</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- open fund pool -->
+                <div id="open_fund_pool" class="card border-left-primary form-group" style="display: none">
+                    <div class="card-body shadow">
+                        <div class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6 class="align-items-center">场外募集基金池</h6>
+                                <select id="unselected-open_fundPool" name="open_fund" multiple class="form-control"
+                                        style="height: 250px; margin-right: 20px;"></select>
+                            </div>
+                            <div class="align-items-center">
+                                <h7>待选基金</h7>
+                                <select id="unselected-open_fund" name="open_fund" multiple class="form-control"
+                                        style="height: 250px;width: 400px;"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-left: 20px;">
+                                <div class="row">
+                                    <button type="button" id="open_fund-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="open_fund-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="open_fund-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="open_fund-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 align-items-center" style="margin-left: 17px;">
+                                <h6>已选基金</h6>
+                                <select id="selected-open_fund" name="open_fund" multiple class="form-control"
+                                        style="height: 250px;width: 400px"></select>
+                            </div>
+                        </div>
+
+
+                        <div id="restrict-open_fund" class="row align-items-center form-group">
+                            <div class="col-md-3">
+                                <h6>待配置基金集</h6>
+                                <select id="unselected-restrict-open_fund" name="open_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;width: 400px"></select>
+                            </div>
+                            <div class="center-block control-buttons" style="margin-left: 60px;">
+                                <div>
+                                    <button type="button" id="restrict-open_fund-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-open_fund-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-open_fund-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div>
+                                    <button type="button" id="restrict-open_fund-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div style="margin-left: 17px;">
+                                <h6>待约束基金集</h6>
+                                <select id="selected-restrict-open_fund" name="open_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;width: 400px"></select>
+                            </div>
+                        </div>
+                        <div class="row align-items-center form-group">
+                            <div class="col-md-2">
+                                <h6>待选约束类型</h6>
+                                <select id="unselected-restrict-open_fund_types" name="open_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                            <div class="center-block control-buttons"
+                                 style="margin-top: 1.6%; margin-left: 1%;">
+                                <div class="row">
+                                    <button type="button" id="restrict-open_fund_types-selectAll"
+                                            class="btn btn-default btn-success btn-selectbox"><i
+                                            class="fas fa-check"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-open_fund_types-selectOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-open_fund_types-removeOne"
+                                            class="btn btn-default btn-primary btn-selectbox"><i
+                                            class="fas fa-arrow-left"></i></button>
+                                </div>
+                                <div class="row">
+                                    <button type="button" id="restrict-open_fund_types-removeAll"
+                                            class="btn btn-default btn-danger btn-selectbox"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-left: 1.2%;">
+                                <h6>已选约束类型</h6>
+                                <select id="selected-restrict-open_fund_types" name="open_fund" multiple
+                                        class="form-control"
+                                        style="height: 250px;"></select>
+                            </div>
+                        </div>
+
+
+                        <div class="row col-md-10 form-group">
+                            <h7 style="margin-top: 0.5%;">取值范围：</h7>
+                            <input type="number" step="0.01" id="restrict-mini-weight-open_fund" value="0"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <h7 style="margin-top: 0.5%;margin-right: 1%;">至</h7>
+                            <input type="number" step="0.01" id="restrict-maxi-weight-open_fund" value="0.4"
+                                   class="form-control"
+                                   style="width: 100px;margin-right: 1%;">
+                            <btn type="button" id="add-restrict-open_fund" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加基金约束
+                            </btn>
+                            <btn type="button" id="add-restrict-open_fund_types" class="btn btn-default btn-success"
+                                 style="margin-right: 2%;">
+                                添加类型约束
+                            </btn>
+                        </div>
+
+                        <div class="col-md-6 table-responsive form-group">
+                            <table class="table table-bordered" id="restrict-table-open_fund" width="100%"
+                                   cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>约束类型</th>
+                                    <th>约束条件</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- submit -->
+                <div class="card form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" id="submit-btn">submit
+                    </button>
+                </div>
+
+
+                <div class="row form-group" id="perform-table" style="display: none">
+                    <div class="col-md-6">
+                        <div class="card border-left-primary form-group">
+                            <div class="card-header">
+                                <h6>策略绝对表现</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="absolutePerform" class="table table-light" width="100%">
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-left-primary form-group">
+                            <div class="card-header">
+                                <h6>策略相对表现</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="relativePerform" class="table table-light" width="100%">
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-left-primary form-group" id="absoluteChart" style="display: none;">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">绝对表现</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="absoluteLine"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-left-primary form-group" id="relativeChart" style="display: none;">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">相对表现</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="relativeLine"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- /.container-fluid -->
+
+
+    </div>
+    <!-- End of Main Content -->
+
+
+    <!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
+<script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+
+
+<!-- Core plugin JavaScript-->
+<script src="{% static "vendor/jquery-easing/jquery.easing.min.js" %}"></script>
+
+
+<!-- Custom scripts for all pages-->
+<script src="{% static "js/sb-admin-2.min.js" %}"></script>
+
+<!-- Page level plugins -->
+
+<!-- Page level custom scripts -->
+<script src="{% static "js/quant.js" %}"></script>
+<script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+<script src="{% static "vendor/datatables/jquery.dataTables.min.js" %}"></script>
+<script src="{% static "js/waitMe.min.js" %}"></script>
+<script src="{% static "vendor/chart.js/Chart.min.js" %}"></script>
+<script src="{% static "vendor/datatables/dataTables.bootstrap4.min.js" %}"></script>
+<script src="{% static "js/dataTables.cellEdit.js" %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var today = new Date();
+
+        var first = true;
+        var modelType = "均值方差模型";
+
+        var data = null;
+        var stockPool = null;
+        var industryPool = null;
+        var indexPool = null;
+
+        var openFundPool = null;
+        var exchangedFundPool = null;
+
+        $('#g_endTime').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            dateFormat: "yy-mm-dd",
+            autoclose: true,
+            setDate: today,
+            endDate: today,
+            startDate: '01/01/2010',
+        });
+
+        $('#g_startTime').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            dateFormat: "yy-mm-dd",
+            autoclose: true,
+            setDate: today,
+            endDate: today,
+            startDate: '01/01/2010',
+        }).on("changeDate", function (e) {
+            data = getData($('#g_startTime').val(), $('#g_endTime').val());
+            stockPool = data['stockPool'];
+            stockPool_industry = data['stockPool_industry'];
+            tradePool = data['tradePool'];
+
+            openFundPool = data['openFundPool'];
+            exchangedFundPool = data['exchangedFundPool'];
+            initializePool(stockPool, '#unselected-stockPool');
+            initializePool(industryPool, '#unselected-tradePool');
+            initializePool(exchangedFundPool, '#unselected-exchanged_fundPool');
+            initializePool(exchangedFundPool, '#unselected-restrict-exchanged_fund_types');
+            initializePool(openFundPool, '#unselected-open_fundPool');
+            initializePool(openFundPool, '#unselected-restrict-open_fund_types');
+        });
+
+
+
+
+
+        data = getData($('#g_startTime').val(), $('#g_endTime').val());
+
+        stockPool = data['stockPool'];
+        industryPool = data['industryPool'];
+        indexPool = data['indexPool'];
+
+        openFundPool = data['openFundPool'];
+        exchangedFundPool = data['exchangedFundPool'];
+
+
+        initializePool(stockPool, '#unselected-stockPool');
+        initializePool(industryPool, '#unselected-tradePool');
+        initializePool(exchangedFundPool, '#unselected-exchanged_fundPool');
+        initializePool(exchangedFundPool, '#unselected-restrict-exchanged_fund_types');
+        initializePool(openFundPool, '#unselected-open_fundPool');
+        initializePool(openFundPool, '#unselected-restrict-open_fund_types');
+
+
+        document.getElementById("unselected-stockPool").onchange = function () {
+            unselectedPoolOnChange(this, stockPool, "#unselected-stock", "#selected-stock");
+        };
+
+        document.getElementById("unselected-exchanged_fundPool").onchange = function () {
+            unselectedPoolOnChange(this, exchangedFundPool, "#unselected-exchanged_fund", "#selected-exchanged_fund");
+        };
+
+        document.getElementById("unselected-open_fundPool").onchange = function () {
+            unselectedPoolOnChange(this, openFundPool, "#unselected-open_fund", "#selected-open_fund");
+        };
+
+        $('#calculate-modal').on('show.bs.modal', function (event) {
+            var date = new Date();
+            $('#modal-title').text('Now ' + date.getHours() + ": " + date.getMinutes() + ": " + date.getSeconds());
+        });
+
+        var restrictTableStock = $('#restrict-table-stock').DataTable({
+            paging: false, info: false, searching: false,
+        });
+        $('#restrict-table-stock').on('dblclick', 'tbody tr', function () {
+            restrictTableStock.row(this).remove().draw(true);
+        });
+
+        var restrictTableHangye = $('#restrict-table-hangye').DataTable({
+            paging: false, info: false, searching: false,
+        });
+        $('#restrict-table-hangye').on('dblclick', 'tbody tr', function () {
+            restrictTableHangye.row(this).remove().draw(true);
+        });
+
+        var restrictTableDapan = $('#restrict-table-dapan').DataTable({
+            paging: false, info: false, searching: false,
+        });
+        $('#restrict-table-dapan').on('dblclick', 'tbody tr', function () {
+            restrictTableDapan.row(this).remove().draw(true);
+        });
+
+        var restrictTableExchanged = $('#restrict-table-exchanged_fund').DataTable({
+            paging: false, info: false, searching: false,
+        });
+        $('#restrict-table-exchanged_fund').on('dblclick', 'tbody tr', function () {
+            restrictTableExchanged.row(this).remove().draw(true);
+        });
+
+        var restrictTableOpen = $('#restrict-table-open_fund').DataTable({
+            paging: false, info: false, searching: false,
+        });
+        $('#restrict-table-open_fund').on('dblclick', 'tbody tr', function () {
+            restrictTableOpen.row(this).remove().draw(true);
+        });
+
+        var tradeTable = null;
+        $("#build-trade-table").on('click', function () {
+            var selected = null;
+            var g_type = $("#selected-type").text().replace(/\s/g, '');
+            if (g_type === "股票") {
+                selected = getAllOptions('selected-stock');
+            }
+            else if (g_type === "大盘指数") {
+                selected = getAllOptions('selected-dapan');
+            }
+            else if (g_type === "行业指数") {
+                selected = getAllOptions('selected-hangye');
+            }
+            else if (g_type === "场内基金") {
+                selected = getAllOptions('selected-exchanged_fund');
+            }
+            else if (g_type === "场外公募基金") {
+                selected = getAllOptions('selected-open_fund');
+            }
+            var names = [];
+            for (var key in selected) {
+                names.push(key);
+            }
+
+            tradeTable = buildTradeTable(first, names);
+            first = false;
+        });
+
+        $('#add-row').on('click', function () {
+            var selected = null;
+            var g_type = $("#selected-type").text().replace(/\s/g, '');
+            if (g_type === "股票") {
+                selected = getAllOptions('selected-stock');
+            }
+            else if (g_type === "大盘指数") {
+                selected = getAllOptions('selected-dapan');
+            }
+            else if (g_type === "行业指数") {
+                selected = getAllOptions('selected-hangye');
+            }
+            else if (g_type === "场内基金") {
+                selected = getAllOptions('selected-exchanged_fund');
+            }
+            else if (g_type === "场外公募基金") {
+                selected = getAllOptions('selected-open_fund');
+            }
+            var arr = [0];
+
+            for (var key in selected) {
+                arr.push(0);
+            }
+            tradeTable.row.add(
+                arr
+            ).draw();
+        });
+
+        $('#trade-table').on('dblclick', 'tbody tr', function () {
+            tradeTable.row(this).remove().draw(true);
+        });
+
+        var subjectFirst = true;
+
+        $('#get-subject-message').on('click', function () {
+            console.log("标的基本信息");
+            var selected = null;
+            var g_type = $("#selected-type").text().replace(/\s/g, '');
+            if (g_type === "股票") {
+                selected = getAllOptions('selected-stock');
+            }
+            else if (g_type === "大盘指数") {
+                selected = getAllOptions('selected-dapan');
+            }
+            else if (g_type === "行业指数") {
+                selected = getAllOptions('selected-hangye');
+            }
+            else if (g_type === "场内基金") {
+                selected = getAllOptions('selected-exchanged_fund');
+            }
+            else if (g_type === "场外公募基金") {
+                selected = getAllOptions('selected-open_fund');
+            }
+            var names = [];
+            for (var key in selected) {
+                names.push(key);
+            }
+            var g_startTime = $("#g_startTime").val()
+            var g_endTime = $("#g_endTime").val();
+            var post_data = {
+                'g_code_list': names,
+                'g_startTime': g_startTime,
+                'g_endTime': g_endTime,
+                'g_type': g_type
+            };
+
+            $.ajax({
+                type: "POST",
+                url: 'get_subject_message',
+                traditional: true,
+                data: post_data,
+                success: function (data) {
+                    if (!subjectFirst) {
+                        $('#subject').DataTable().clear().destroy();
+                        $('#subject').empty();
+                    }
+                    buildTable('#subject', data['dataset'], data['columns']);
+                    subjectFirst = false;
+                },
+                error: function (xhr, status) {
+                }
+            });
+        });
+
+        $("#stock-selectOne").on('click', function () {
+            selectOne("unselected-stock", "selected-stock", "unselected-restrict-stock");
+        });
+        $("#stock-removeOne").on('click', function () {
+            removeOne("unselected-stock", "selected-stock", "unselected-restrict-stock");
+        });
+        $("#stock-selectAll").on('click', function () {
+            selectAll("unselected-stock", "selected-stock", "unselected-restrict-stock");
+        });
+        $("#stock-removeAll").on('click', function () {
+            removeAll("unselected-stock", "selected-stock", "unselected-restrict-stock", "selected-restrict-stock");
+        });
+        $('#unselected-stock').dblclick(function () {
+            selectOne("unselected-stock", "selected-stock", "unselected-restrict-stock");
+        });
+        $('#selected-stock').dblclick(function () {
+            removeOne("unselected-stock", "selected-stock", "unselected-restrict-stock", "selected-restrict-stock");
+        });
+
+        $("#dapan-selectOne").on('click', function () {
+            selectOne("unselected-dapan", "selected-dapan", "unselected-restrict-dapan");
+        });
+        $("#dapan-removeOne").on('click', function () {
+            removeOne("unselected-dapan", "selected-dapan", "unselected-restrict-dapan");
+        });
+        $("#dapan-selectAll").on('click', function () {
+            selectAll("unselected-dapan", "selected-dapan", "unselected-restrict-dapan");
+        });
+        $("#dapan-removeAll").on('click', function () {
+            removeAll("unselected-dapan", "selected-dapan", "unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+        $('#unselected-dapan').dblclick(function () {
+            selectOne("unselected-dapan", "selected-dapan", "unselected-restrict-dapan");
+        });
+        $('#selected-dapan').dblclick(function () {
+            removeOne("unselected-dapan", "selected-dapan", "unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+
+        $("#hangye-selectOne").on('click', function () {
+            selectOne("unselected-hangye", "selected-hangye", "unselected-restrict-hangye");
+        });
+        $("#hangye-removeOne").on('click', function () {
+            removeOne("unselected-hangye", "selected-hangye", "unselected-restrict-hangye");
+        });
+        $("#hangye-selectAll").on('click', function () {
+            selectAll("unselected-hangye", "selected-hangye", "unselected-restrict-hangye");
+        });
+        $("#hangye-removeAll").on('click', function () {
+            removeAll("unselected-hangye", "selected-hangye", "unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+        $('#unselected-hangye').dblclick(function () {
+            selectOne("unselected-hangye", "selected-hangye", "unselected-restrict-hangye");
+        });
+        $('#selected-hangye').dblclick(function () {
+            removeOne("unselected-hangye", "selected-hangye", "unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+
+        $("#open_fund-selectOne").on('click', function () {
+            selectOne("unselected-open_fund", "selected-open_fund", "unselected-restrict-open_fund");
+        });
+        $("#open_fund-removeOne").on('click', function () {
+            removeOne("unselected-open_fund", "selected-open_fund", "unselected-restrict-open_fund");
+        });
+        $("#open_fund-selectAll").on('click', function () {
+            selectAll("unselected-open_fund", "selected-open_fund", "unselected-restrict-open_fund");
+        });
+        $("#open_fund-removeAll").on('click', function () {
+            removeAll("unselected-open_fund", "selected-open_fund", "unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+        $('#unselected-open_fund').dblclick(function () {
+            selectOne("unselected-open_fund", "selected-open_fund", "unselected-restrict-open_fund");
+        });
+        $('#selected-open_fund').dblclick(function () {
+            removeOne("unselected-open_fund", "selected-open_fund", "unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+
+        $("#exchanged_fund-selectOne").on('click', function () {
+            selectOne("unselected-exchanged_fund", "selected-exchanged_fund", "unselected-restrict-exchanged_fund");
+        });
+        $("#exchanged_fund-removeOne").on('click', function () {
+            removeOne("unselected-exchanged_fund", "selected-exchanged_fund", "unselected-restrict-exchanged_fund");
+        });
+        $("#exchanged_fund-selectAll").on('click', function () {
+            selectAll("unselected-exchanged_fund", "selected-exchanged_fund", "unselected-restrict-exchanged_fund");
+        });
+        $("#exchanged_fund-removeAll").on('click', function () {
+            removeAll("unselected-exchanged_fund", "selected-exchanged_fund", "unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+        $('#unselected-exchanged_fund').dblclick(function () {
+            selectOne("unselected-exchanged_fund", "selected-exchanged_fund", "unselected-restrict-exchanged_fund");
+        });
+        $('#selected-exchanged_fund').dblclick(function () {
+            removeOne("unselected-exchanged_fund", "selected-exchanged_fund", "unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+
+        $("#trade-selectOne").on('click', function () {
+            selectOneTrade("unselected-trade", "selected-trade");
+        });
+        $("#trade-removeOne").on('click', function () {
+            removeOneTrade("unselected-trade", "selected-trade");
+        });
+        $("#trade-selectAll").on('click', function () {
+            selectAllTrade("unselected-trade", "selected-trade");
+        });
+        $("#trade-removeAll").on('click', function () {
+            removeAllTrade("unselected-trade", "selected-trade");
+        });
+        $('#unselected-trade').dblclick(function () {
+            selectOneTrade("unselected-trade", "selected-trade");
+        });
+        $('#selected-trade').dblclick(function () {
+            removeOneTrade("unselected-trade", "selected-trade");
+        });
+
+
+        $("#restrict-trade-selectOne").on('click', function () {
+            selectOneRestrict("unselected-restrict-trade", "selected-restrict-trade");
+        });
+        $("#restrict-trade-removeOne").on('click', function () {
+            removeOneRestrict("unselected-restrict-trade", "selected-restrict-trade");
+        });
+        $("#restrict-trade-selectAll").on('click', function () {
+            selectAllRestrict("unselected-restrict-trade", "selected-restrict-trade");
+        });
+        $("#restrict-trade-removeAll").on('click', function () {
+            removeAllRestrict("unselected-restrict-trade", "selected-restrict-trade");
+        });
+        $('#unselected-restrict-trade').dblclick(function () {
+            selectOneRestrict("unselected-restrict-trade", "selected-restrict-trade");
+        });
+        $('#selected-restrict-trade').dblclick(function () {
+            removeOneRestrict("unselected-restrict-trade", "selected-restrict-trade");
+        });
+
+        $("#restrict-hangye-selectOne").on('click', function () {
+            selectOneRestrict("unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+        $("#restrict-hangye-removeOne").on('click', function () {
+            removeOneRestrict("unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+        $("#restrict-hangye-selectAll").on('click', function () {
+            selectAllRestrict("unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+        $("#restrict-hangye-removeAll").on('click', function () {
+            removeAllRestrict("unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+        $('#unselected-restrict-hangye').dblclick(function () {
+            selectOneRestrict("unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+        $('#selected-restrict-hangye').dblclick(function () {
+            removeOneRestrict("unselected-restrict-hangye", "selected-restrict-hangye");
+        });
+
+        $("#restrict-dapan-selectOne").on('click', function () {
+            selectOneRestrict("unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+        $("#restrict-dapan-removeOne").on('click', function () {
+            removeOneRestrict("unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+        $("#restrict-dapan-selectAll").on('click', function () {
+            selectAllRestrict("unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+        $("#restrict-dapan-removeAll").on('click', function () {
+            removeAllRestrict("unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+        $('#unselected-restrict-dapan').dblclick(function () {
+            selectOneRestrict("unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+        $('#selected-restrict-dapan').dblclick(function () {
+            removeOneRestrict("unselected-restrict-dapan", "selected-restrict-dapan");
+        });
+
+        $("#restrict-exchanged_fund_types-selectOne").on('click', function () {
+            selectOneRestrict("unselected-restrict-exchanged_fund_types", "selected-restrict-exchanged_fund_types");
+        });
+        $("#restrict-exchanged_fund_types-removeOne").on('click', function () {
+            removeOneRestrict("unselected-restrict-exchanged_fund_types", "selected-restrict-exchanged_fund_types");
+        });
+        $("#restrict-exchanged_fund_types-selectAll").on('click', function () {
+            selectAllRestrict("unselected-restrict-exchanged_fund_types", "selected-restrict-exchanged_fund_types");
+        });
+        $("#restrict-exchanged_fund_types-removeAll").on('click', function () {
+            removeAllRestrict("unselected-restrict-exchanged_fund_types", "selected-restrict-exchanged_fund_types");
+        });
+        $('#unselected-restrict-exchanged_fund_types').dblclick(function () {
+            selectOneRestrict("unselected-restrict-exchanged_fund_types", "selected-restrict-exchanged_fund_types");
+        });
+        $('#selected-restrict-exchanged_fund_types').dblclick(function () {
+            removeOneRestrict("unselected-restrict-exchanged_fund_types", "selected-restrict-exchanged_fund_types");
+        });
+
+        $("#restrict-open_fund_types-selectOne").on('click', function () {
+            selectOneRestrict("unselected-restrict-open_fund_types", "selected-restrict-open_fund_types");
+        });
+        $("#restrict-open_fund_types-removeOne").on('click', function () {
+            removeOneRestrict("unselected-restrict-open_fund_types", "selected-restrict-open_fund_types");
+        });
+        $("#restrict-open_fund_types-selectAll").on('click', function () {
+            selectAllRestrict("unselected-restrict-open_fund_types", "selected-restrict-open_fund_types");
+        });
+        $("#restrict-open_fund_types-removeAll").on('click', function () {
+            removeAllRestrict("unselected-restrict-open_fund_types", "selected-restrict-open_fund_types");
+        });
+        $('#unselected-restrict-open_fund_types').dblclick(function () {
+            selectOneRestrict("unselected-restrict-open_fund_types", "selected-restrict-open_fund_types");
+        });
+        $('#selected-restrict-open_fund_types').dblclick(function () {
+            removeOneRestrict("unselected-restrict-open_fund_types", "selected-restrict-open_fund_types");
+        });
+
+        $('#restrict-stock-selectOne').on('click', function () {
+            selectOneRestrict("unselected-restrict-stock", "selected-restrict-stock");
+        });
+        $('#restrict-stock-selectAll').on('click', function () {
+            selectAllRestrict("unselected-restrict-stock", "selected-restrict-stock");
+        });
+        $('#restrict-stock-removeOne').on('click', function () {
+            removeOneRestrict("unselected-restrict-stock", "selected-restrict-stock");
+        });
+        $('#restrict-stock-removeAll').on('click', function () {
+            removeAllRestrict("unselected-restrict-stock", "selected-restrict-stock");
+        });
+
+        $('#unselected-restrict-stock').dblclick(function () {
+            selectOneRestrict("unselected-restrict-stock", "selected-restrict-stock");
+        });
+        $('#selected-restrict-stock').dblclick(function () {
+            removeOneRestrict("unselected-restrict-stock", "selected-restrict-stock");
+        });
+
+        $('#restrict-open_fund-selectOne').on('click', function () {
+            selectOneRestrict("unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+        $('#restrict-open_fund-selectAll').on('click', function () {
+            selectAllRestrict("unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+        $('#restrict-open_fund-removeOne').on('click', function () {
+            removeOneRestrict("unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+        $('#restrict-open_fund-removeAll').on('click', function () {
+            removeAllRestrict("unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+
+        $('#unselected-restrict-open_fund').dblclick(function () {
+            selectOneRestrict("unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+        $('#selected-restrict-open_fund').dblclick(function () {
+            removeOneRestrict("unselected-restrict-open_fund", "selected-restrict-open_fund");
+        });
+
+        $('#restrict-exchanged_fund-selectOne').on('click', function () {
+            selectOneRestrict("unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+        $('#restrict-exchanged_fund-selectAll').on('click', function () {
+            selectAllRestrict("unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+        $('#restrict-exchanged_fund-removeOne').on('click', function () {
+            removeOneRestrict("unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+        $('#restrict-exchanged_fund-removeAll').on('click', function () {
+            removeAllRestrict("unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+
+        $('#unselected-restrict-exchanged_fund').dblclick(function () {
+            selectOneRestrict("unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+        $('#selected-restrict-exchanged_fund').dblclick(function () {
+            removeOneRestrict("unselected-restrict-exchanged_fund", "selected-restrict-exchanged_fund");
+        });
+
+        $(function () {
+            $("#models").on('click', 'li a', function () {
+                $("#model-types").text($(this).text());
+                if (modelType !== 'B-L模型' && $(this).text() === 'B-L模型') {
+                    $("#bl-model").toggle("slow");
+                }
+                if (modelType === 'B-L模型' && $(this).text() !== 'B-L模型') {
+                    $("#bl-model").toggle("slow");
+                }
+                modelType = $(this).text();
+
+            });
+
+            $("#g-benmark").on('click', 'li a', function () {
+                $("#g-benmarks").text($(this).text());
+            });
+
+            var selected_type = "股票";
+            var type_to_id = {
+                '股票': '#stock_pool',
+                '大盘指数': '#dapan_pool',
+                '行业指数': '#hangye_pool',
+                '场内基金': '#exchanged_fund_pool',
+                '场外公募基金': "#open_fund_pool"
+            };
+            $("#types").on('click', 'li a', function () {
+                $("#selected-type").text($(this).text());
+                if (selected_type !== $(this).text()) {
+                    $(type_to_id[selected_type]).toggle("slow");
+                    selected_type = $(this).text();
+                    $(type_to_id[selected_type]).toggle("slow");
+                }
+            });
+
+            $("#calculation").on('click', 'li a', function () {
+                $("#expected-benefit").text($(this).text());
+            });
+
+            $('#add-restrict-stock').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-stock");
+                var miniWeight = document.getElementById("restrict-mini-weight-stock").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-stock").value;
+                for (var key in restricts) {
+                    restrictTableStock.row.add(["股票比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+
+            $('#add-restrict-trade').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-trade");
+                var miniWeight = document.getElementById("restrict-mini-weight-stock").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-stock").value;
+                for (var key in restricts) {
+                    restrictTableStock.row.add(["行业比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+
+            $('#add-restrict-dapan').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-dapan");
+                var miniWeight = document.getElementById("restrict-mini-weight-dapan").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-dapan").value;
+                for (var key in restricts) {
+                    restrictTableDapan.row.add(["大盘比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+
+            $('#add-restrict-hangye').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-hangye");
+                var miniWeight = document.getElementById("restrict-mini-weight-hangye").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-hangye").value;
+                for (var key in restricts) {
+                    restrictTableHangye.row.add(["行业比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+
+            $('#add-restrict-exchanged_fund').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-exchanged_fund");
+                var miniWeight = document.getElementById("restrict-mini-weight-exchanged_fund").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-exchanged_fund").value;
+                for (var key in restricts) {
+                    restrictTableExchanged.row.add(["基金比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+
+            $('#add-restrict-exchanged_fund_types').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-exchanged_fund_types");
+                var miniWeight = document.getElementById("restrict-mini-weight-exchanged_fund").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-exchanged_fund").value;
+                for (var key in restricts) {
+                    restrictTableExchanged.row.add(["类型比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+
+            $('#add-restrict-open_fund').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-open_fund");
+                var miniWeight = document.getElementById("restrict-mini-weight-open_fund").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-open_fund").value;
+                for (var key in restricts) {
+                    restrictTableOpen.row.add(["基金比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+
+            $('#add-restrict-open_fund_types').on('click', function () {
+                var restricts = getAllOptions("selected-restrict-open_fund_types");
+                var miniWeight = document.getElementById("restrict-mini-weight-open_fund").value;
+                var maxiWeight = document.getElementById("restrict-maxi-weight-open_fund").value;
+                for (var key in restricts) {
+                    restrictTableOpen.row.add(["类型比例约束", miniWeight + "<=" + key + "<=" + maxiWeight]).draw();
+                }
+            });
+        });
+
+        $("#single-restrict").hide();
+        $("#bl-model").hide();
+
+        $('.datepicker').datepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            format: 'yyyy/mm/dd',
+        });
+
+
+        submitFirst = true;
+        var absoluteLine = null;
+        var relativeLine = null;
+        $('#submit-btn').click(function (e) {
+            {#e.preventDefault();#}
+            // your statements;
+            var options = null;
+            var g_code_list = [];
+            var restrict = [];
+            var g_type = $("#selected-type").text().replace(/\s/g, '');
+            if (g_type === '股票') {
+                options = getAllOptions("selected-stock");
+                for (i = 0; i < restrictTableStock.column(1).data().length; i++) {
+                    restrict.push(restrictTableStock.column(1).data().data()[i][1]);
+                }
+            }
+            else if (g_type === '大盘指数') {
+                options = getAllOptions("selected-dapan");
+                for (i = 0; i < restrictTableDapan.column(1).data().length; i++) {
+                    restrict.push(restrictTableDapan.column(1).data().data()[i][1]);
+                }
+            }
+            else if (g_type === '行业指数') {
+                options = getAllOptions("selected-hangye");
+                for (i = 0; i < restrictTableHangye.column(1).data().length; i++) {
+                    restrict.push(restrictTableHangye.column(1).data().data()[i][1]);
+                }
+            }
+            else if (g_type === '场外公募基金') {
+                options = getAllOptions("selected-open_fund");
+                for (i = 0; i < restrictTableOpen.column(1).data().length; i++) {
+                    restrict.push(restrictTableOpen.column(1).data().data()[i][1]);
+                }
+            }
+            else {
+                options = getAllOptions("selected-exchanged_fund");
+                for (i = 0; i < restrictTableExchanged.column(1).data().length; i++) {
+                    restrict.push(restrictTableExchanged.column(1).data().data()[i][1]);
+                }
+            }
+
+            for (item in options) {
+                g_code_list.push(item);
+            }
+            console.log(g_code_list);
+
+            var bl_data = [];
+            if (modelType === 'B-L模型' && !first) {
+                for (var i = 0; i < tradeTable.column(1).data().length; i++) {
+                    var len = Object.keys(options).length;
+                    for (var j = 0; j <= len; j++) {
+                        bl_data.push(tradeTable.column(1).data().data()[i][j]);
+                    }
+                }
+            }
+
+            $('#content').waitMe({
+                effect: 'bounce',
+                text: '',
+                bg: "rgba(255, 255, 255, 0.7)",
+                color: "#000"
+            });
+
+            var g_benchmark = $("#g-benmarks").text().replace(/\s/g, '');
+
+            var post_data = {
+                g_baseCapital: $("#g_baseCapital").val(),
+                g_rebalance_days: $("#g_rebalance_days").val(),
+                g_startTime: $("#g_startTime").val(),
+                g_endTime: $("#g_endTime").val(),
+                g_restrict: restrict,
+                g_code_list: g_code_list,
+                g_lookback: $("#g_lookback").val(),
+                g_commission: $("#g_commission").val(),
+                g_slippage: $("#g_slippage").val(),
+                g_benchmark: g_benchmark,
+                g_type: g_type,
+                model_type: modelType,
+                bl_data: bl_data,
+                g_rf: $("#g_rf").val(),
+            };
+            $.ajax({
+                type: "POST",
+                url: 'backtest_submit',
+                traditional: true,
+                data: post_data,
+                success: function (data) {
+                    $('#perform-table').show();
+                    $('#relativeChart').show();
+                    $('#absoluteChart').show();
+                    if (!submitFirst) {
+                        $('#absolutePerform').DataTable().clear().destroy();
+                        $('#absolutePerform').empty();
+                        $('#relativePerform').DataTable().clear().destroy();
+                        $('#relativePerform').empty();
+                        absoluteLine.destroy();
+                        relativeLine.destroy();
+                    }
+                    buildPerformTable('#absolutePerform', data['absolute_dataset'], data['absolute_columns'], '策略绝对表现');
+                    buildPerformTable('#relativePerform', data['relative_dataset'], data['relative_columns'], '策略相对表现');
+                    absoluteLine = buildAbsoluteChart(data['timestamps'], data['absolute_values'], data['absolute_benchmarks'], post_data['g_benchmark']);
+                    relativeLine = buildRelativeChart(data['timestamps'], data['relative_values']);
+                    submitFirst = false;
+                    $('#content').waitMe('hide');
+                },
+                error: function (xhr, status) {
+                    $('#content').waitMe('hide');
+                }
+            });
+
+
+        });
+
+
+    })
+    ;
+</script>
+
+</body>
+
+</html>

@@ -1,58 +1,57 @@
-function getStockPool() {
-    var stockPool = null;
-    $.ajax({
-        url: 'get_stocks',
-        type: 'get',
-        async: false,
-        success: function (data) {
-            stockPool = data;
-        },
-        error: function (data) {
-            console.log('fail');
-        }
+function getData(start_date, end_date) {
+    var ret = null;
+    var post_data = {
+        'start_date': start_date,
+        'end_date': end_date
+    };
+    $('#content').waitMe({
+        effect: 'bounce',
+        text: '',
+        bg: "rgba(255, 255, 255, 0.7)",
+        color: "#000"
     });
-    return stockPool;
-}
-
-function getTradesPool() {
-    var tradePool = null;
     $.ajax({
-        url: 'get_trades',
-        type: 'get',
+        url: 'get_data',
+        type: 'post',
         async: false,
+        data: post_data,
         success: function (data) {
-            tradePool = data;
-            var unselectedTrades = $("#unselected-trades");
-            var unselectedRestrictTrades = $("#unselected-restrict-trades");
-            var trades = tradePool['申万一级行业'];
+            ret = data;
+            var tradePool = data['industryPool'];
+            var unselectedRestrictTrades = $("#unselected-restrict-trade");
+            var unselectedhangye = $("#unselected-hangye");
+            var trades = tradePool;
             for (var idx in trades) {
-                unselectedTrades.append('<option value="' + trades[idx] + '">' + trades[idx] + '</option>');
+                // unselectedTrades.append('<option value="' + trades[idx] + '">' + trades[idx] + '</option>');
                 unselectedRestrictTrades.append('<option value="' + trades[idx] + '">' + trades[idx] + '</option>');
+                unselectedhangye.append('<option value="' + trades[idx] + '">' + trades[idx] + '</option>');
             }
+
+            var dapanPool = data['indexPool'];
+            var unselecteddapan = $("#unselected-dapan");
+            for (var idx in dapanPool) {
+                unselecteddapan.append('<option value="' + dapanPool[idx] + '">' + dapanPool[idx] + '</option>');
+            }
+            $('#content').waitMe('hide');
         },
         error: function (data) {
-            console.log('fail');
+            $('#content').waitMe('hide');
         }
     });
-    return tradePool;
+    return ret;
 }
 
-function initializePool(stockPool, divid) {
-    for (var key in stockPool) {
+function initializePool(pool, divid) {
+    removeAllOptions(divid.substring(1));
+    for (var key in pool) {
         $(divid).append('<option value="' + key + '">' + key + '</option>');
     }
 }
 
-function initializeRestrictPool(restrictPool) {
-    for (var key in restrictPool) {
-        $('#unselected-restrict-stocks').append('<option value="' + key + '">' + key + '</option>');
-    }
-}
-
-function selectOneStock() {
-    var unselectedStocks = document.getElementById("unselected-stocks");
-    var selectedStocks = document.getElementById("selected-stocks");
-    var restrictStockspool = document.getElementById("unselected-restrict-stocks");
+function selectOne(unselected, selected, unselected_restrict) {
+    var unselectedStocks = document.getElementById(unselected);
+    var selectedStocks = document.getElementById(selected);
+    var restrictStockspool = document.getElementById(unselected_restrict);
     var index = unselectedStocks.selectedIndex;
     if (index !== -1) {
         var value = unselectedStocks.options[index].value;
@@ -61,58 +60,73 @@ function selectOneStock() {
         restrictStockspool.add(new Option(text, value));
         unselectedStocks.options.remove(index);
 
-        sortSelect("unselected-stocks");
-        sortSelect("selected-stocks");
+        sortSelect(unselected);
+        sortSelect(selected);
     }
 }
 
-function selectAllStocks() {
-    var unselectedStocks = getAllOptions("unselected-stocks");
+function selectAll(unselected, selected, unselected_restrict) {
+    var unselectedStocks = getAllOptions(unselected);
 
-    removeAllOptions("unselected-stocks");
-    addOptions("selected-stocks", unselectedStocks);
-    addOptions("unselected-restrict-stocks", unselectedStocks);
-    sortSelect("selected-stocks");
-
+    removeAllOptions(unselected);
+    addOptions(selected, unselectedStocks);
+    addOptions(unselected_restrict, unselectedStocks);
+    sortSelect(selected);
 }
 
-function removeOneStock() {
-    var unselectedStocks = document.getElementById("unselected-stocks");
-    var selectedStocks = document.getElementById("selected-stocks");
-    var restrictStockspool = document.getElementById("unselected-restrict-stocks");
+function removeOne(unselected, selected, unselected_restrict, selected_restrict) {
+    var unselectedStocks = document.getElementById(unselected);
+    var selectedStocks = document.getElementById(selected);
+    var un_restrictStockspool = document.getElementById(unselected_restrict);
+    var restrictStockspool = document.getElementById(selected_restrict);
     var index = selectedStocks.selectedIndex;
     if (index !== -1) {
         var value = selectedStocks.options[index].value;
         var text = selectedStocks.options[index].text;
         unselectedStocks.add(new Option(text, value));
+
+
+        var temp = un_restrictStockspool.options;
+        for (var i = 0; i < temp.length; i++) {
+            if (un_restrictStockspool.options[i].text === text) {
+                un_restrictStockspool.options.remove(i);
+                break;
+            }
+        }
+
         selectedStocks.options.remove(index);
-        restrictStockspool.options.remove(index);
 
-        sortSelect("unselected-stocks");
-        sortSelect("selected-stocks");
+        temp = restrictStockspool.options;
+        for (var i = 0; i < temp.length; i++) {
+            if (restrictStockspool.options[i].text === text) {
+                restrictStockspool.options.remove(i);
+                break;
+            }
+        }
+
+        sortSelect(unselected);
+        sortSelect(selected);
     }
-
 }
 
-function removeAllStocks() {
-    var selectedStocks = getAllOptions("selected-stocks");
-    console.log(selectedStocks);
-
-    removeAllOptions("selected-stocks");
-    removeAllOptions("unselected-restrict-stocks");
-    addOptions("unselected-stocks", selectedStocks);
-    sortSelect("unselected-stocks");
+function removeAll(unselected, selected, unselected_restrict, selected_restrict) {
+    var selectedStocks = getAllOptions(selected);
+    removeAllOptions(selected);
+    removeAllOptions(unselected_restrict);
+    removeAllOptions(selected_restrict);
+    addOptions(unselected, selectedStocks);
+    sortSelect(unselected);
 }
 
-function unselectedStockPoolOnChange(widget, stockPool) {
-    var unselectedStocks = $("#unselected-stocks");
+function unselectedPoolOnChange(widget, stockPool, unselected, selected) {
+    var unselectedStocks = $(unselected);
     var index = widget.selectedIndex;
     var value = widget.options[index].value;
     unselectedStocks.find('option').remove();
     var stocks = stockPool[value];
 
     var selectedStocks = [];
-    var temp = $("#selected-stocks")[0];
+    var temp = $(selected)[0];
     if (temp.options !== null) {
         for (var i = 0; i < temp.options.length; i++) {
             selectedStocks[i] = temp.options[i].value;
@@ -124,15 +138,14 @@ function unselectedStockPoolOnChange(widget, stockPool) {
             unselectedStocks.append('<option value="' + stocks[idx] + '">' + stocks[idx] + '</option>');
         }
     }
-
-    sortSelect("unselected-stocks");
+    sortSelect(unselected.substring(1));
 }
 
 //
 
-function selectOneTrade() {
-    var unselectedTrades = document.getElementById("unselected-trades");
-    var selectedTrades = document.getElementById("selected-trades");
+function selectOneTrade(unselected, selected) {
+    var unselectedTrades = document.getElementById(unselected);
+    var selectedTrades = document.getElementById(selected);
     var index = unselectedTrades.selectedIndex;
     if (index !== -1) {
         var value = unselectedTrades.options[index].value;
@@ -140,22 +153,22 @@ function selectOneTrade() {
         selectedTrades.add(new Option(text, value));
         unselectedTrades.options.remove(index);
 
-        sortSelect("unselected-trades");
-        sortSelect("selected-trades");
+        sortSelect(unselected);
+        sortSelect(selected);
     }
 }
 
-function selectAllTrades() {
-    var unselectedTrades = getAllOptions("unselected-trades");
+function selectAllTrade(unselected, selected) {
+    var unselectedTrades = getAllOptions(unselected);
 
-    removeAllOptions("unselected-trades");
-    addOptions("selected-trades", unselectedTrades);
-    sortSelect("selected-trades");
+    removeAllOptions(unselected);
+    addOptions(selected, unselectedTrades);
+    sortSelect(selected);
 }
 
-function removeOneTrade() {
-    var unselectedTrades = document.getElementById("unselected-trades");
-    var selectedTrades = document.getElementById("selected-trades");
+function removeOneTrade(unselected, selected) {
+    var unselectedTrades = document.getElementById(unselected);
+    var selectedTrades = document.getElementById(selected);
     var index = selectedTrades.selectedIndex;
     if (index !== -1) {
         var value = selectedTrades.options[index].value;
@@ -163,18 +176,16 @@ function removeOneTrade() {
         unselectedTrades.add(new Option(text, value));
         selectedTrades.options.remove(index);
 
-        sortSelect("unselected-trades");
-        sortSelect("selected-trades");
+        sortSelect(unselected);
+        sortSelect(selected);
     }
 }
 
-function removeAllTrades() {
-    var selectedTrades = getAllOptions("selected-trades");
-    console.log(selectedTrades);
-
-    removeAllOptions("selected-trades");
-    addOptions("unselected-trades", selectedTrades);
-    sortSelect("unselected-trades");
+function removeAllTrade(unselected, selected) {
+    var selectedTrades = getAllOptions(selected);
+    removeAllOptions(selected);
+    addOptions(unselected, selectedTrades);
+    sortSelect(unselected);
 }
 
 //
@@ -220,9 +231,9 @@ function sortSelect(elementID) {
     }
 }
 
-function selectOneStockRestrict() {
-    var unselectedStocks = document.getElementById("unselected-restrict-stocks");
-    var selectedStocks = document.getElementById("selected-restrict-stocks");
+function selectOneRestrict(unselect, select) {
+    var unselectedStocks = document.getElementById(unselect);
+    var selectedStocks = document.getElementById(select);
     var index = unselectedStocks.selectedIndex;
     if (index !== -1) {
         var value = unselectedStocks.options[index].value;
@@ -230,23 +241,23 @@ function selectOneStockRestrict() {
         selectedStocks.add(new Option(text, value));
         unselectedStocks.options.remove(index);
 
-        sortSelect("unselected-restrict-stocks");
-        sortSelect("selected-restrict-stocks");
+        sortSelect(unselect);
+        sortSelect(select);
     }
 }
 
-function selectAllStocksRestrict() {
-    var unselectedStocks = getAllOptions("unselected-restrict-stocks");
+function selectAllRestrict(unselect, select) {
+    var unselectedStocks = getAllOptions(unselect);
 
-    removeAllOptions("unselected-restrict-stocks");
-    addOptions("selected-restrict-stocks", unselectedStocks);
-    sortSelect("selected-restrict-stocks");
+    removeAllOptions(unselect);
+    addOptions(select, unselectedStocks);
+    sortSelect(select);
 
 }
 
-function removeOneStockRestrict() {
-    var unselectedStocks = document.getElementById("unselected-restrict-stocks");
-    var selectedStocks = document.getElementById("selected-restrict-stocks");
+function removeOneRestrict(unselect, select) {
+    var unselectedStocks = document.getElementById(unselect);
+    var selectedStocks = document.getElementById(select);
     var index = selectedStocks.selectedIndex;
     if (index !== -1) {
         var value = selectedStocks.options[index].value;
@@ -254,106 +265,61 @@ function removeOneStockRestrict() {
         unselectedStocks.add(new Option(text, value));
         selectedStocks.options.remove(index);
 
-        sortSelect("unselected-restrict-stocks");
-        sortSelect("selected-restrict-stocks");
+        sortSelect(unselect);
+        sortSelect(select);
     }
 
 }
 
-function removeAllStocksRestrict() {
-    var selectedStocks = getAllOptions("selected-restrict-stocks");
+function removeAllRestrict(unselect, select) {
+    var selectedStocks = getAllOptions(select);
 
-    removeAllOptions("selected-restrict-stocks");
-    addOptions("unselected-restrict-stocks", selectedStocks);
-    sortSelect("unselected-restrict-stocks");
+    removeAllOptions(select);
+    addOptions(unselect, selectedStocks);
+    sortSelect(unselect);
 }
 
-function myCallbackFunction(updatedCell, updatedRow, oldValue) {
-
-}
-
-
-//
-
-function selectOneRestrictTrade() {
-    var unselectedTrades = document.getElementById("unselected-restrict-trades");
-    var selectedTrades = document.getElementById("selected-restrict-trades");
-    var index = unselectedTrades.selectedIndex;
-    if (index !== -1) {
-        var value = unselectedTrades.options[index].value;
-        var text = unselectedTrades.options[index].text;
-        selectedTrades.add(new Option(text, value));
-        unselectedTrades.options.remove(index);
-
-        sortSelect("unselected-restrict-trades");
-        sortSelect("selected-restrict-trades");
-    }
-}
-
-function selectAllRestrictTrades() {
-    var unselectedTrades = getAllOptions("unselected-restrict-trades");
-
-    removeAllOptions("unselected-restrict-trades");
-    addOptions("selected-restrict-trades", unselectedTrades);
-    sortSelect("selected-restrict-trades");
-}
-
-function removeOneRestrictTrade() {
-    var unselectedTrades = document.getElementById("unselected-restrict-trades");
-    var selectedTrades = document.getElementById("selected-restrict-trades");
-    var index = selectedTrades.selectedIndex;
-    if (index !== -1) {
-        var value = selectedTrades.options[index].value;
-        var text = selectedTrades.options[index].text;
-        unselectedTrades.add(new Option(text, value));
-        selectedTrades.options.remove(index);
-
-        sortSelect("unselected-restrict-trades");
-        sortSelect("selected-restrict-trades");
-    }
-}
-
-function removeAllRestrictTrades() {
-    var selectedTrades = getAllOptions("selected-restrict-trades");
-
-    removeAllOptions("selected-restrict-trades");
-    addOptions("unselected-restrict-trades", selectedTrades);
-    sortSelect("unselected-restrict-trades");
-}
-
-//
-
-function buildTradeTable(first) {
+function buildTradeTable(first, names) {
     if (!first) {
         $("#trade-table").DataTable().clear().destroy();
         $("#trade-table").empty();
     }
-    var options = getAllOptions("selected-trades");
     var columns = new Array();
     var data = new Array();
-    // cd = [];
-    for (var key in options) {
-        columns.push({"title": key, "orderable": false,});
-        data.push(1.0);
+    for (var i = 0; i < names.length; i++) {
+        columns.push({"title": names[i], "orderable": false,});
+        data.push(0);
     }
+    columns.push({"title": '预期收益'});
+    data.push(0);
     tradeTable = $('#trade-table').removeAttr('width').DataTable({
         "data": [data],
         "columns": columns,
-        searching: false, paging: false, info: false,
+        searching: false,
+        paging: false,
+        bPaginate: false,
+        bLengthChange: false,
+        bFilter: true,
+        bInfo: false,
+        bAutoWidth: false,
+        aaSorting: []
     });
     tradeTable.MakeCellsEditable({
         "onUpdate": myCallbackFunction
     });
+    return tradeTable;
 }
 
+function myCallbackFunction() {
 
-function buildGeguTable(dataset, columns) {
+}
 
+function buildTable(id, dataset, columns) {
     tablecolumns = [];
     for (var key in columns) {
         tablecolumns.push({title: columns[key], orderable: false,});
     }
-    $('#gegu').DataTable({
+    $(id).DataTable({
         "sDom": '<"toolbar">frtip',
         data: dataset,
         columns: tablecolumns,
@@ -366,7 +332,6 @@ function buildGeguTable(dataset, columns) {
         bAutoWidth: false,
         aaSorting: []
     });
-    $("div.toolbar").html('<b>个股表格</b>');
 }
 
 function buildPerformTable(id, dataset, columns, title) {
@@ -404,22 +369,58 @@ function buildBarGraph(id, barNames, barValues) {
         colors.push(defaultColors[i % 6]);
     }
 
+    var options = {
+        responsive: true,
+        scales: {
+            yAxes: [{
+                display: true,
+                ticks: {
+                    beginAtZero: true,
+                    // max: 1,
+                    min: 0
+                }
+            }]
+        },
+        legend: {
+            display: false
+        },
+        title: {
+            display: false,
+            text: name
+        },
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        },
+
+    };
+
+
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: barNames,
             datasets: [{
-                label: '市值权重',
                 data: barValues,
                 backgroundColor: colors,
                 borderColor: colors,
                 borderWidth: 1
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-        }
+        options: options,
+        plugins: [{
+            beforeInit: function (chart) {
+                chart.data.labels.forEach(function (e, i, a) {
+                    if (/\n/.test(e)) {
+                        a[i] = e.split(/\n/);
+                    }
+                });
+            }
+        }]
     });
     return myChart;
 }
@@ -480,10 +481,10 @@ function buildAbsoluteChart(timestamps, absolute_values, benchmark_values, bench
             responsive: true,
             maintainAspectRatio: false,
             elements: {
-                    point:{
-                        radius: 0
-                    }
+                point: {
+                    radius: 0
                 }
+            }
         }
     };
 
@@ -543,14 +544,26 @@ function buildRelativeChart(timestamps, relative_values) {
             responsive: true,
             maintainAspectRatio: false,
             elements: {
-                    point:{
-                        radius: 0
-                    }
+                point: {
+                    radius: 0
                 }
+            }
         }
     };
 
     var relativeLine = new Chart(ctx, config);
 
     return relativeLine;
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [month, day, year].join('/');
 }

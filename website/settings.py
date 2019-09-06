@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import djcelery
+djcelery.setup_loader()  # 加载djcelery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djcelery',
     'quant',
 ]
 
@@ -124,3 +127,27 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+REDIS_TIMEOUT = 7*24*60*60
+CUBES_REDIS_TIMEOUT = 60*60
+NEVER_REDIS_TIMEOUT = 365*24*60*60
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_ENABLE_UTC = True
+
+CELERYD_CONCURRENCY = 1
+CELERYD_PREFETCH_MULTIPLIER = 1
+# 允许的格式
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'yaml']
+
+BROKER_URL= 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'

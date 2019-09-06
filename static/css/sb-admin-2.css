@@ -12014,3 +12014,5 @@ body.sidebar-toggled footer.sticky-footer {
 .btn-selectbox {
   margin-left: 10%;
 }
+
+canvas { width: 100% !important; height:100% !important; }
